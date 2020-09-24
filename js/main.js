@@ -1,0 +1,771 @@
+var count = 0;
+var myDate = new Date();
+window.time = myDate.getFullYear() + "-" + (myDate.getMonth() + 1) + "-" + myDate.getDate() + " " + myDate.getHours() + ":" + myDate.getMinutes() + ":" + myDate.getSeconds();;
+var map = ["一", "二", "三", "四", "五", "六", "七", "八", "九"];
+var orderNum = [1, 2, 3, 3, 4, 5, 5, 6, 13, 6, 7, 8, 8, 9, 10, 10, 11, 12, 13, 14, 15, 18];
+var specialNum = [1, 2, 3, 3, 4, 5, 5, 6, 13, 6, 7, 8, 8, 9, 10, 10, 11, 12, 13, 14, 15, 15, 16, 17, 18, 19, 20];
+var FZ = [101, 102, 103, 203, 204, 205, 305, 306, 3013, 406, 407, 408, 508, 509, 5010, 6010, 6011, 6012, 7013, 7014, 7015, 7018, 8015, 8016, 8017, 9018, 9019, 9020];
+
+window.chartCount = 0;
+window.timeout = false; //启动及关闭按钮 
+window.amplitudeOrAngle = true;
+window.myArray = [0, 0, 0, 0, 0];
+
+// 手动、自动按钮切换函数
+$(function() {
+
+    $("#loading").hide();
+    $('.switch input').bootstrapSwitch({
+
+        onColor: "success",
+        offColor: "warning",
+        onSwitchChange: function(event, state) {
+
+            if (state == true) {
+
+                window.timeout = true;
+
+                $("#container1").css("display", "block");
+                $('#datetime1').datetimepicker().on('changeDate', function(ev) {
+
+                    window.time = $("#form-control1").val();
+
+                    if (window.time != "") {
+
+                        setTimeout(function() {
+
+                            Refresh(window.time, amplitudeOrAngle);
+                        }, 100)
+                    }
+                });
+            } else {
+                $("#container1").css("display", "none");
+
+                window.timeout = false;
+                window.time = myDate.getFullYear() + "-" + (myDate.getMonth() + 1) + "-" + myDate.getDate() + " " + myDate.getHours() + ":" + myDate.getMinutes() + ":" + myDate.getSeconds();
+                interval();
+            }
+        }
+    });
+    $('.switch input').bootstrapSwitch('toggleState', true);
+});
+
+function interval() {
+    if (timeout) return;
+    Refresh(window.time, amplitudeOrAngle);
+    setTimeout(interval, 40000); //time是指本身,延时递归调用自己,100为间隔调用时间,单位毫秒 
+}
+
+
+// 入口函数在这里
+$(document).ready(function() {
+
+
+    Refresh(window.time, amplitudeOrAngle);
+    setTimeout(interval, 40000);
+
+});
+
+function Refresh(time, amplitudeOrAngle) {
+
+    var titleName = new Array();
+    $(".pic .move").remove();
+    if (amplitudeOrAngle == true) {
+        titleName = ["模值(A)", "模值(V)"];
+    } else
+        titleName = ["相角(度)", "相角(度)"];
+
+    //....................................................箱变表格绘制...............................................................
+
+    for (var i = 1; i <= 2; i++) {
+
+        $(".pic").html($(".pic").html() +
+            "<table class=\"table table-bordered move XB\" order=\"" + i + "\"  id=\"move" + i + "\" style=\"table-layout: fixed;\"><thead>" +
+            "<tr><th width=\"40px\">#" + i + "</th><th width=\"70px\">" + titleName[1] + "</th></tr></thead><tbody><tr>" +
+            // "<td><img src=\"http:\/\/latex.codecogs.com/gif.latex?\\overline{U}\" title=\" \\overline{U}\" /></td> "  +
+            "<td style=\"text-decoration:overline;\">U</td> " +
+            "<td style=\"padding:8px 0;text-align:center;\">0</td></tr><tr>" +
+            // "<td><img src=\"http:\/\/latex.codecogs.com/gif.latex?3U_0\" title=\"3U_0\" /></td> " +
+            "<td>3U<sub>0</sub></td> " +
+            "<td style=\"padding:8px 0;text-align:center;\">0</td></tr></tbody></table>");
+
+        getXB_1(i, time, amplitudeOrAngle);
+
+    }
+    for (var i = 6; i <= 11; i++) {
+
+        if (i != 7 && i != 11) {
+            $(".pic").html($(".pic").html() +
+                "<table class=\"table table-bordered move XB\" order=\"" + i + "\"  id=\"move" + i + "\" style=\"table-layout: fixed;\"><thead>" +
+                "<tr><th width=\"40px\">#" + i + "</th><th width=\"70px\">" + titleName[1] + "</th></tr></thead><tbody><tr>" +
+                // "<td><img src=\"http:\/\/latex.codecogs.com/gif.latex?\\overline{U}\" title=\" \\overline{U}\" /></td> "  +
+                "<td style=\"text-decoration:overline;\">U</td> " +
+                "<td style=\"padding:8px 0;text-align:center;\">0</td></tr><tr>" +
+                // "<td><img src=\"http:\/\/latex.codecogs.com/gif.latex?3U_0\" title=\"3U_0\" /></td> " +
+                "<td>3U<sub>0</sub></td> " +
+                "<td style=\"padding:8px 0;text-align:center;\">0</td></tr></tbody></table>");
+            getXB_1(i, time, amplitudeOrAngle);
+        }
+
+        //升压站表格绘制
+        if (i == 11) {
+            $(".pic").html($(".pic").html() +
+                "<table class=\"table table-bordered move XB\" order=\"" + i + "\"  id=\"move" + i + "\" style=\"table-layout: fixed;\"><thead>" +
+                "<tr><th width=\"70px\">#升压站</th><th width=\"70px\">" + titleName[1] + "</th></tr></thead><tbody><tr>" +
+                // "<td><img src=\"http:\/\/latex.codecogs.com/gif.latex?\\overline{U}\" title=\" \\overline{U}\" /></td> "  +
+                "<td style=\"text-decoration:overline;\">U</td> " +
+                "<td style=\"padding:8px 0;text-align:center;\">0</td></tr><tr>" +
+                // "<td><img src=\"http:\/\/latex.codecogs.com/gif.latex?3U_0\" title=\"3U_0\" /></td> " +
+                "<td>3U<sub>0</sub></td> " +
+                "<td style=\"padding:8px 0;text-align:center;\">0</td></tr></tbody></table>");
+
+            getXB_1(i, time, amplitudeOrAngle);
+        }
+
+    }
+
+    //....................................................分支箱表格绘制...............................................................
+
+    var number = ["一", "二", "三", "四", "五", "六", "七", "八", "九"];
+
+    for (var i = 0; i < 8; i++) {
+
+        if (i == 0) {
+
+            createBox_info_first(orderNum);
+            getFZ_1(i, time, amplitudeOrAngle);
+        } else if (i == 1) {
+
+            createBox_info_last(orderNum);
+            getFZ_1(i, time, amplitudeOrAngle);
+        } else if (i == 2) {
+
+            createBox_info_middle(orderNum);
+            getFZ_1(i, time, amplitudeOrAngle);
+        } else if (i == 3) {
+
+            createBox_info_last(orderNum);
+            getFZ_1(i, time, amplitudeOrAngle);
+        } else if (i == 4) {
+
+            createBox_info_last(orderNum);
+            getFZ_1(i, time, amplitudeOrAngle);
+        } else if (i == 5) {
+            //do nothing
+        } else if (i == 6) {
+
+            createBox_info_last(orderNum);
+            getFZ_1(i, time, amplitudeOrAngle);
+        } else if (i == 7) {
+
+            createBox_info_last(specialNum);
+            getFZ_1(i, time, amplitudeOrAngle);
+        }
+    }
+
+
+    function createBox_info(category) {
+
+        $(".pic").html($(".pic").html() +
+            "<table class=\"table table-bordered move\" id=\"box_info" + (i + 1) + "\" style=\"table-layout: fixed;\"> " +
+            "<thead><tr><th  width=\"40px\">分" + number[i] + "</th><th width=\"60px\">" + category[3 * i] + titleName[0] + "</th><th width=\"60px\">" + category[3 * i + 1] + titleName[0] + "</th><th width=\"60px\">" + category[3 * i + 2] + titleName[0] + "</th></tr></thead>" +
+            // "<tbody><tr><td><img src=\"http:\/\/latex.codecogs.com/gif.latex?\\overline{I}\" title=\"\\overline{I}\" /></td> " +
+            "<tbody><tr><td style=\"text-decoration:overline;\">I</td> " +
+            "<td>0</td><td>0</td><td>0</td>" +
+            // "</tr><tr><td><img src=\"http:\/\/latex.codecogs.com/gif.latex?3I_0\" title=\"3I_0\" /></td>" +
+            "</tr><tr><td>3I<sub>0</sub></td>" +
+            "<td>0</td><td>0</td><td>0</td>" +
+            // "</tr><tr><td><img src=\"http:\/\/latex.codecogs.com/gif.latex?I_{g1}\" title=\"I_{g1}\" /></td>" +
+            "</tr><tr><td>I<sub>g1</sub></td>" +
+            "<td>0</td><td>0</td><td>0</td>" +
+            // "</tr><tr><td><img src=\"http:\/\/latex.codecogs.com/gif.latex?I_{g2}\" title=\"I_{g2}\" /></td>" +
+            "</tr><tr><td>I<sub>g2</sub></td>" +
+            "<td>0</td><td>0</td><td>0</td></tr></tbody>");
+    }
+
+    //在createBox_info所产生的表格基础上删除数据列第一列
+    function createBox_info_first(category) {
+
+        $(".pic").html($(".pic").html() +
+            "<table class=\"table table-bordered move\" id=\"box_info" + (i + 1) + "\" style=\"table-layout: fixed;\"> " +
+            "<thead><tr><th  width=\"40px\">分" + number[i] + "</th><th width=\"60px\">" + category[3 * i + 1] + titleName[0] + "</th><th width=\"60px\">" + category[3 * i + 2] + titleName[0] + "</th></tr></thead>" +
+            // "<tbody><tr><td><img src=\"http:\/\/latex.codecogs.com/gif.latex?\\overline{I}\" title=\"\\overline{I}\" /></td> " +
+            "<tbody><tr><td style=\"text-decoration:overline;\">I</td> " +
+            "<td>0</td><td>0</td>" +
+            // "</tr><tr><td><img src=\"http:\/\/latex.codecogs.com/gif.latex?3I_0\" title=\"3I_0\" /></td>" +
+            "</tr><tr><td>3I<sub>0</sub></td>" +
+            "<td>0</td><td>0</td>" +
+            // "</tr><tr><td><img src=\"http:\/\/latex.codecogs.com/gif.latex?I_{g1}\" title=\"I_{g1}\" /></td>" +
+            "</tr><tr><td>I<sub>g1</sub></td>" +
+            "<td>0</td><td>0</td>" +
+            // "</tr><tr><td><img src=\"http:\/\/latex.codecogs.com/gif.latex?I_{g2}\" title=\"I_{g2}\" /></td>" +
+            "</tr><tr><td>I<sub>g2</sub></td>" +
+            "<td>0</td><td>0</td></tr></tbody>");
+    }
+
+    //在createBox_info所产生的表格基础上删除数据列最后一列
+    function createBox_info_last(category) {
+
+        $(".pic").html($(".pic").html() +
+            "<table class=\"table table-bordered move\" id=\"box_info" + (i + 1) + "\" style=\"table-layout: fixed;\"> " +
+            "<thead><tr><th  width=\"40px\">分" + number[i] + "</th><th width=\"60px\">" + category[3 * i + 0] + titleName[0] + "</th><th width=\"60px\">" + category[3 * i + 1] + titleName[0] + "</th></tr></thead>" +
+            "<tbody><tr><td style=\"text-decoration:overline;\">I</td> " +
+            "<td>0</td><td>0</td>" +
+            "</tr><tr><td>3I<sub>0</sub></td>" +
+            "<td>0</td><td>0</td>" +
+            "</tr><tr><td>I<sub>g1</sub></td>" +
+            "<td>0</td><td>0</td>" +
+            "</tr><tr><td>I<sub>g2</sub></td>" +
+            "<td>0</td><td>0</td></tr></tbody>");
+    }
+
+    //在createBox_info所产生的表格基础上删除数据列中间列
+    function createBox_info_middle(category) {
+
+        $(".pic").html($(".pic").html() +
+            "<table class=\"table table-bordered move\" id=\"box_info" + (i + 1) + "\" style=\"table-layout: fixed;\"> " +
+            "<thead><tr><th  width=\"40px\">分" + number[i] + "</th><th width=\"60px\">" + category[3 * i + 0] + titleName[0] + "</th><th width=\"60px\">" + category[3 * i + 2] + titleName[0] + "</th></tr></thead>" +
+            "<tbody><tr><td style=\"text-decoration:overline;\">I</td> " +
+            "<td>0</td><td>0</td>" +
+            "</tr><tr><td>3I<sub>0</sub></td>" +
+            "<td>0</td><td>0</td>" +
+            "</tr><tr><td>I<sub>g1</sub></td>" +
+            "<td>0</td><td>0</td>" +
+            "</tr><tr><td>I<sub>g2</sub></td>" +
+            "<td>0</td><td>0</td></tr></tbody>");
+    }
+
+    $(".box").click(function() {
+
+        $("#compare").animate({ right: "0" });
+
+        if (count >= 12) {
+
+            $("#mymodal").modal("toggle");
+        } else {
+
+            count = count + 4;
+            var order = $(this).attr("order");
+            getFZ_2(order, time);
+        }
+    });
+
+    $(".flag").click(function() {
+
+        $("#compare").animate({ right: "0" });
+
+        if (count >= 12) {
+
+            $("#mymodal").modal("toggle");
+        } else {
+
+            var order = $(this).attr("order");
+            if (order == 11) { order = 200; }
+            count = count + 3;
+            getXB_2(order, time);
+        }
+    });
+
+}
+
+$(function() {
+    $("#alarm").click(function() {
+        getAlarm("", "");
+        $("#warningList_2").modal("toggle");
+    });
+    $("#search_2").click(function() {
+        getAlarm($("#deviceIDs").val(), $("#dtp_input_2").val());
+    })
+})
+
+
+// 获取异常列表（删）
+
+$(function() {
+
+    $(":radio").click(function() {
+
+        if ($(this).val() == "amplitude") {
+            window.amplitudeOrAngle = true;
+            Refresh(window.time, amplitudeOrAngle);
+        } else {
+            window.amplitudeOrAngle = false;
+            Refresh(window.time, amplitudeOrAngle);
+        }
+    });
+});
+
+
+
+$(function() {
+
+    // 	var chooseTime;
+
+    // 	$('#datetime2').datetimepicker().on('changeDate', function(ev){
+
+    //      chooseTime = ;
+    // });
+
+    $("#search").click(function() {
+
+        getWarningListFun($("#dtp_input_1").val(), "");
+    });
+});
+
+// 获取报警列表
+function getWarningListFun(ErrorTime, ErrorLine) {
+
+    var ErrorTitle = "异常电缆段：" + ErrorLine + "&nbsp;&nbsp;&nbsp;&nbsp;异常时间：" + ErrorTime;
+
+    $.ajax({
+
+        url: url + "/getExceptionList",
+        type: "post",
+        data: { "DeviceID": "", "datatime": ErrorTime },
+        success: function(res) {
+
+            var count = 0;
+            var content = "";
+
+            while (res.getElementsByTagName("Table")[count] != null)
+                count++;
+
+            for (var i = 0; i < count; i++) {
+
+                for (var j = 1; j <= 4; j++) {
+                    if (j == 1)
+                        content = content + "<tr><td>" + (i + 1) + "</td><td>" + GetDeviceID(parseInt(res.getElementsByTagName("Table")[i].childNodes[2 * j - 1].childNodes[0].nodeValue)) + "</td>";
+                    if (j == 4)
+                        content = content + "</tr>";
+                    if (j == 3)
+                        content = content + "<td>" + res.getElementsByTagName("Table")[i].childNodes[2 * j - 1].childNodes[0].nodeValue + "</td>";
+                }
+            }
+            content = content.replace(/m/g, "短路电流").replace(/l/g, "漏电流").replace(/C/g, "三相电流").replace(/V/g, "电压");
+            content = content.replace(/T/g, " ");
+
+            $("#warningList h4").html(ErrorTitle);
+
+            $("#list").html("");
+            $("#list").html("<table class=\"table table-bordered table-striped table-hover\">" +
+                "<thead><tr>" +
+                "<th>序号</th><th>设备号</th><th>数据类型</th></tr></thead><tbody>" + content + "</tbody></table>");
+
+            $("#list table tbody tr").click(function(e) {
+
+                window.chartCount++;
+                if (window.chartCount < 5) {
+
+                    var ErrorID = $(this).children().eq(1)[0].innerHTML;
+                    var ErrorType = $(this).children().eq(2)[0].innerHTML == '电压' ? " 电压" : " 电流";
+                    var sendID = "";
+                    ErrorID == "升压站" ? sendID = 200 : sendID = backID(ErrorID);
+                    var tempIndex;
+
+                    for (var i = 1; i < 5; i++) {
+                        if (myArray[i] == 0) {
+                            tempIndex = i;
+                            myArray[i] = 1;
+                            break;
+                        }
+                    }
+                    $("#show" + tempIndex).modal("show");
+                    $("#show" + tempIndex).find("h4").text(ErrorID + ErrorType + "异常情况");
+
+                    $.ajax({
+                        url: url + "/getDataByDevice_Exp_3",
+                        type: "post",
+                        data: { "DeviceID": sendID, "datatime": ErrorTime },
+                        success: function(res) {
+                            var t = [];
+                            var a = [];
+                            var errorData = res.getElementsByTagName("string")[0].innerHTML.split(";");
+                            a[0] = errorData[0].split(",");
+                            a[1] = errorData[1].split(",");
+                            a[2] = errorData[2].split(",");
+                            for (var i = 0; i < a[0].length; i++) t.push((0.625 * i).toFixed(1));
+                            if (ErrorType == " 电流")
+                                errorC(a[0], a[1], a[2], t, "charts" + tempIndex);
+                            else
+                                errorV(a[0], a[1], a[2], t, "charts" + tempIndex);
+                        }
+                    });
+                } else {
+                    window.chartCount = 4;
+                    alert("折线图过多，请先关掉部分后重试！");
+                }
+            });
+        }
+    })
+}
+
+function errorC(x1, x2, x3, time, div) {
+
+    window.myChart1 = echarts.init(document.getElementById(div));
+
+    option = {
+        xAxis: {
+            name: '毫秒',
+            type: 'category',
+            data: time,
+            axisLine: { symbol: ['none', 'arrow'], symbolOffset: [0, 12], symbolSize: [10, 15] }
+        },
+        yAxis: {
+            name: '模值',
+            type: 'value',
+            axisLine: { symbol: ['none', 'arrow'], symbolOffset: [0, 12], symbolSize: [10, 15] }
+        },
+        tooltip: {
+            trigger: 'axis',
+            axisPointer: {
+                type: 'cross',
+                animation: false,
+                label: {
+                    backgroundColor: '#505765'
+                }
+            }
+        },
+        series: [{
+                name: 'A相电流',
+                data: x1,
+                type: 'line'
+            },
+            {
+                name: 'B相电流',
+                data: x2,
+                type: 'line'
+            },
+            {
+                name: 'C相电流',
+                data: x3,
+                type: 'line'
+            }
+        ],
+        legend: {
+            data: ['A相电流', 'B相电流', 'C相电流'],
+            right: '100'
+        }
+    };
+    myChart1.setOption(option);
+}
+
+// 对出错电压的绘图
+function errorV(x1, x2, x3, time, div) {
+
+    window.myChart2 = echarts.init(document.getElementById(div));
+    option = {
+        xAxis: {
+            name: '毫秒',
+            type: 'category',
+            data: time,
+            axisLine: { symbol: ['none', 'arrow'], symbolOffset: [0, 12], symbolSize: [10, 15] }
+        },
+        yAxis: {
+            name: '模值(V)',
+            type: 'value',
+            axisLine: { symbol: ['none', 'arrow'], symbolOffset: [0, 12], symbolSize: [10, 15] }
+        },
+        tooltip: {
+            trigger: 'axis',
+            axisPointer: {
+                type: 'cross',
+                animation: false,
+                label: {
+                    backgroundColor: '#505765'
+                }
+            }
+        },
+        series: [{
+                name: 'A相电压',
+                data: x1,
+                type: 'line',
+                itemStyle: { normal: { color: '#CD00CD' } }
+            },
+            {
+                name: 'B相电压',
+                data: x2,
+                type: 'line',
+                itemStyle: { normal: { color: 'blue' } }
+            },
+            {
+                name: 'C相电压',
+                data: x3,
+                type: 'line',
+                itemStyle: { normal: { color: '#008F28' } }
+            }
+        ],
+        legend: {
+            data: ['A相电压', 'B相电压', 'C相电压'],
+            right: '100'
+        }
+
+    };
+    myChart2.setOption(option);
+}
+
+
+$(function() {
+    // 删掉了介损角信息的图表\钠图表
+
+    $("#content").on("click", ".I_history", function() {
+        $("#line_loss_chart").modal("toggle");
+        drawI_history(window.time, $(this).attr("order"));
+    });
+});
+
+// 绘制电流历史曲线
+function drawI_history(time, id) {
+
+    $.ajax({
+        url: url + "/getCurrentById",
+        type: "post",
+        data: {
+            // "datatime":time,
+            "id": id
+        },
+        success: function(res) {
+
+            var loss = res.getElementsByTagName("string")[0].innerHTML.split(";")[0].split(",");
+            var temp = res.getElementsByTagName("string")[0].innerHTML.split(";")[1].split(",");
+            var date = [];
+            for (var i = 0; i < temp.length; i++) {
+                var x = temp[i].toString().replace(" ", "-")
+                date.push(x);
+
+            }
+
+
+            try {
+                myChart.clear();
+            } catch (e) {
+
+            }
+            var myChart = echarts.init(document.getElementById('line_loss_pic'));
+
+            option = {
+                title: {
+                    text: id + '号电缆段电流历史信息',
+                    x: 'center'
+
+                },
+                tooltip: {
+                    trigger: 'axis'
+                },
+
+                toolbox: {
+                    show: true,
+                    feature: {
+                        dataZoom: {
+                            yAxisIndex: 'none'
+                        },
+                        dataView: { readOnly: false },
+                        magicType: { type: ['line', 'bar'] },
+
+
+                    }
+                },
+                xAxis: {
+                    type: 'category',
+                    boundaryGap: false,
+                    data: date
+                },
+                yAxis: {
+                    type: 'value',
+                    axisLabel: {
+                        formatter: '{value} A'
+                    }
+                },
+                series: [{
+                    name: '当前电流',
+                    type: 'line',
+                    data: loss,
+                    itemStyle: { normal: { color: '#26C0C0' } },
+                    markLine: {
+                        data: [
+                            { type: 'average', name: '平均值' }
+                        ]
+                    }
+                }]
+            };
+            myChart.setOption(option);
+        }
+
+    })
+}
+
+
+function GetDeviceID(ID) {
+
+    var result = ID;
+
+    if (ID == 200) { result = "升压站"; return result; }
+    if (ID < 1000)
+        result = "分支箱" + map[Math.floor(ID / 100 - 1)] + (ID % 100) + "号线";
+    else
+        result = "分支箱" + map[Math.floor(ID / 1000 - 1)] + (ID % 100) + "号线";
+    return result;
+
+}
+
+function backID(name) {
+
+    var ID = "";
+
+    for (var i = 0; i < 9; i++) {
+        if (map[i] == name[3]) {
+            ID = i + 1;
+            break;
+        }
+    }
+    if (name.length > 7) ID = ID + '0' + name[4] + name[5];
+    else ID = ID + '0' + name[4];
+    return ID;
+}
+
+//////////////////
+
+for (var i = 1; i < 5; i++) $("#show" + i).draggable();
+
+$(function() { $('#warningList').on('hide.bs.modal', function() { window.chartCount = 0; }) });
+$(function() {
+    $('#show1').on('hide.bs.modal', function() {
+        myArray[1] = 0;
+        window.chartCount--;
+    })
+});
+$(function() {
+    $('#show2').on('hide.bs.modal', function() {
+        myArray[2] = 0;
+        window.chartCount--;
+    })
+});
+$(function() {
+    $('#show3').on('hide.bs.modal', function() {
+        myArray[3] = 0;
+        window.chartCount--;
+    })
+});
+$(function() {
+    $('#show4').on('hide.bs.modal', function() {
+        myArray[4] = 0;
+        window.chartCount--;
+    })
+});
+
+$(document).on('show.bs.modal', '.modal', function(event) {
+    $(this).appendTo($('body'));
+}).on('shown.bs.modal', '.modal.in', function(event) {
+    setModalsAndBackdropsOrder();
+}).on('hidden.bs.modal', '.modal', function(event) {
+    setModalsAndBackdropsOrder();
+});
+
+//////////////
+
+function setModalsAndBackdropsOrder() {
+    var modalZIndex = 1040;
+    $('.modal.in').each(function(index) {
+        var $modal = $(this);
+        modalZIndex++;
+        $modal.css('zIndex', modalZIndex);
+        $modal.next('.modal-backdrop.in').addClass('hidden').css('zIndex', modalZIndex - 1);
+    });
+    $('.modal.in:visible:last').focus().next('.modal-backdrop.in').removeClass('hidden');
+}
+
+// 获取异常报警信息，并绘制表格
+function getAlarm(data, time) {
+    $.ajax({
+        url: url + "/getExceptionList_Hardware",
+        type: "post",
+        data: { "DeviceID": data, "datatime": time },
+        success: function(res) {
+
+            var count = 0;
+            var content = "";
+
+            while (res.getElementsByTagName("Table")[count] != null)
+                count++;
+
+            for (var i = 0; i < count; i++) {
+
+                for (var j = 1; j <= 5; j++) {
+                    if (j == 1)
+                        content = content + "<tr><td>" + (i + 1) + "</td><td>" + GetDeviceID_2(res.getElementsByTagName("Table")[i].childNodes[2 * j - 1].childNodes[0].nodeValue) + "</td>";
+                    else if (j == 5)
+                        content = content + "<td>" + res.getElementsByTagName("Table")[i].childNodes[2 * j - 1].childNodes[0].nodeValue + "</td></tr>";
+                    else
+                        content = content + "<td>" + res.getElementsByTagName("Table")[i].childNodes[2 * j - 1].childNodes[0].nodeValue + "</td>";
+                }
+            }
+            content = content.replace(/m/g, "短路电流").replace(/l/g, "漏电流").replace(/c/g, "三相电流").replace(/v/g, "电压");
+            content = content.replace(/T/g, " ").replace(/\+08:00/g, " ");
+
+            $("#list_2").html("");
+            $("#list_2").html("<table class=\"table table-bordered table-striped table-hover\">" +
+                "<thead><tr>" +
+                "<th>序号</th><th>设备号</th><th>相位</th><th>异常类型</th><th>异常时间</th><th>长度</th></tr></thead><tbody>" + content + "</tbody></table>");
+
+            $("#list_2 table tbody tr").click(function(e) {
+                var ErrorTime = $(this).children().eq(4)[0].innerHTML;
+                window.timeout = true;
+                Refresh(ErrorTime, amplitudeOrAngle);
+
+                $("#warningList_2").modal("toggle");
+            });
+        }
+    })
+}
+
+// 获取设备号，用于绘制表格时显示名字
+function GetDeviceID_2(DeviceID) {
+    var ID = parseInt(DeviceID);
+    if (ID > 20) {
+        switch (ID) {
+            case 23:
+                return "箱变一";
+            case 26:
+                return "箱变二";
+            case 24:
+                return "箱变八";
+            case 25:
+                return "箱变十";
+            case 21:
+                return "箱变六";
+            case 22:
+                return "箱变九";
+        }
+    }
+    if (ID < 20) {
+        switch (ID) {
+            case 1:
+                return "分支箱一2号线";
+            case 2:
+                return "分支箱一3号线";
+            case 4:
+                return "分支箱二3号线";
+            case 3:
+                return "分支箱二4号线";
+            case 14:
+                return "分支箱三5号线";
+            case 13:
+                return "分支箱三13号线";
+            case 6:
+                return "分支箱四6号线";
+            case 5:
+                return "分支箱四7号线";
+            case 8:
+                return "分支箱五8号线";
+            case 7:
+                return "分支箱五9号线";
+            case 10:
+                return "分支箱七13号线";
+            case 9:
+                return "分支箱七14号线";
+            case 12:
+                return "分支箱八15号线";
+            case 11:
+                return "分支箱八16号线";
+        }
+    }
+}

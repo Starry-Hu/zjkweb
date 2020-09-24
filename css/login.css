@@ -1,0 +1,90 @@
+*{
+	margin: 0;
+	padding: 0;
+}
+html,body{
+	height: 100%;
+	width: 100%;
+}
+#back_img{
+	height: 100%;
+	width: 100%;
+	margin: 0 auto;
+	background-image: url(../img/login_back.png);
+	background-size: cover;
+	position: relative;
+	z-index: 1;
+}
+#content
+{
+	position: absolute;
+	z-index: 2;
+
+	height: 600px;
+	width: 900px;
+/*	border: 1px solid #000;*/
+	left: 0;
+	right: 0;
+	top: 0;
+	bottom: 0;
+	margin:auto;
+}
+#content span
+{
+	display: block;
+	width: 100%;
+	height: 120px;
+	line-height: 120px;
+	text-align: center;
+	color: #fff;
+	font-size: 40px;
+	letter-spacing: 0.1em;
+	text-shadow:7px 7px 4px #000;
+}
+#input_box
+{
+	height: 350px;
+	width: 500px;
+	background-color: #fff;
+	border-radius: 10px;
+	opacity: 0.9;
+	filter: alpha(opacity=90); 
+	box-shadow: 5px 5px 8px 5px rgba(0,0,0,.6);
+	margin: 0 auto;
+	margin-top: 30px;
+	background: -webkit-linear-gradient(bottom, top, #c8c8c8, #fff, #c8c8c8); /* Safari 5.1 - 6.0 */
+    background: -o-linear-gradient(bottom, top, #c8c8c8, #fff, #c8c8c8); /* Opera 11.1 - 12.0 */
+    background: -moz-linear-gradient(bottom, top, #c8c8c8, #fff, #c8c8c8); /* Firefox 3.6 - 15 */
+    background: linear-gradient(to top, #c8c8c8, #fff, #c8c8c8); /* 标准的语法（必须放在最后） */
+
+}
+.layui-form-item
+{
+	position: relative;
+	margin-bottom: 30px!important;
+}
+.layui-input
+{
+	padding-left: 38px!important;
+	width: 80%;
+}
+.layadmin-user-login-icon {
+    position: absolute;
+    left: 1px;
+    top: 1px;
+    width: 38px;
+    line-height: 36px;
+    text-align: center;
+    color: #d2d2d2;
+}
+.inputs
+{
+	width: 80%;
+	margin: 0 auto;
+	padding-top: 80px;
+}
+#tip
+{
+	text-align: center;
+	color: red;
+}

@@ -59,215 +59,36 @@ function interval() {
 
 // 入口函数在这里
 $(document).ready(function() {
-
-
     Refresh(window.time, amplitudeOrAngle);
     setTimeout(interval, 40000);
 
 });
 
 function Refresh(time, amplitudeOrAngle) {
-
-    var titleName = new Array();
-    $(".pic .move").remove();
-    if (amplitudeOrAngle == true) {
-        titleName = ["模值(A)", "模值(V)"];
-    } else
-        titleName = ["相角(度)", "相角(度)"];
-
-    //....................................................箱变表格绘制...............................................................
-
-    for (var i = 1; i <= 2; i++) {
-
-        $(".pic").html($(".pic").html() +
-            "<table class=\"table table-bordered move XB\" order=\"" + i + "\"  id=\"move" + i + "\" style=\"table-layout: fixed;\"><thead>" +
-            "<tr><th width=\"40px\">#" + i + "</th><th width=\"70px\">" + titleName[1] + "</th></tr></thead><tbody><tr>" +
-            // "<td><img src=\"http:\/\/latex.codecogs.com/gif.latex?\\overline{U}\" title=\" \\overline{U}\" /></td> "  +
-            "<td style=\"text-decoration:overline;\">U</td> " +
-            "<td style=\"padding:8px 0;text-align:center;\">0</td></tr><tr>" +
-            // "<td><img src=\"http:\/\/latex.codecogs.com/gif.latex?3U_0\" title=\"3U_0\" /></td> " +
-            "<td>3U<sub>0</sub></td> " +
-            "<td style=\"padding:8px 0;text-align:center;\">0</td></tr></tbody></table>");
-
-        getXB_1(i, time, amplitudeOrAngle);
-
-    }
-    for (var i = 6; i <= 11; i++) {
-
-        if (i != 7 && i != 11) {
-            $(".pic").html($(".pic").html() +
-                "<table class=\"table table-bordered move XB\" order=\"" + i + "\"  id=\"move" + i + "\" style=\"table-layout: fixed;\"><thead>" +
-                "<tr><th width=\"40px\">#" + i + "</th><th width=\"70px\">" + titleName[1] + "</th></tr></thead><tbody><tr>" +
-                // "<td><img src=\"http:\/\/latex.codecogs.com/gif.latex?\\overline{U}\" title=\" \\overline{U}\" /></td> "  +
-                "<td style=\"text-decoration:overline;\">U</td> " +
-                "<td style=\"padding:8px 0;text-align:center;\">0</td></tr><tr>" +
-                // "<td><img src=\"http:\/\/latex.codecogs.com/gif.latex?3U_0\" title=\"3U_0\" /></td> " +
-                "<td>3U<sub>0</sub></td> " +
-                "<td style=\"padding:8px 0;text-align:center;\">0</td></tr></tbody></table>");
-            getXB_1(i, time, amplitudeOrAngle);
-        }
-
-        //升压站表格绘制
-        if (i == 11) {
-            $(".pic").html($(".pic").html() +
-                "<table class=\"table table-bordered move XB\" order=\"" + i + "\"  id=\"move" + i + "\" style=\"table-layout: fixed;\"><thead>" +
-                "<tr><th width=\"70px\">#升压站</th><th width=\"70px\">" + titleName[1] + "</th></tr></thead><tbody><tr>" +
-                // "<td><img src=\"http:\/\/latex.codecogs.com/gif.latex?\\overline{U}\" title=\" \\overline{U}\" /></td> "  +
-                "<td style=\"text-decoration:overline;\">U</td> " +
-                "<td style=\"padding:8px 0;text-align:center;\">0</td></tr><tr>" +
-                // "<td><img src=\"http:\/\/latex.codecogs.com/gif.latex?3U_0\" title=\"3U_0\" /></td> " +
-                "<td>3U<sub>0</sub></td> " +
-                "<td style=\"padding:8px 0;text-align:center;\">0</td></tr></tbody></table>");
-
-            getXB_1(i, time, amplitudeOrAngle);
-        }
-
-    }
+    $("#tableInfo table").remove();
 
     //....................................................分支箱表格绘制...............................................................
 
     var number = ["一", "二", "三", "四", "五", "六", "七", "八", "九"];
 
     for (var i = 0; i < 8; i++) {
-
-        if (i == 0) {
-
-            createBox_info_first(orderNum);
-            getFZ_1(i, time, amplitudeOrAngle);
-        } else if (i == 1) {
-
-            createBox_info_last(orderNum);
-            getFZ_1(i, time, amplitudeOrAngle);
-        } else if (i == 2) {
-
-            createBox_info_middle(orderNum);
-            getFZ_1(i, time, amplitudeOrAngle);
-        } else if (i == 3) {
-
-            createBox_info_last(orderNum);
-            getFZ_1(i, time, amplitudeOrAngle);
-        } else if (i == 4) {
-
-            createBox_info_last(orderNum);
-            getFZ_1(i, time, amplitudeOrAngle);
-        } else if (i == 5) {
-            //do nothing
-        } else if (i == 6) {
-
-            createBox_info_last(orderNum);
-            getFZ_1(i, time, amplitudeOrAngle);
-        } else if (i == 7) {
-
-            createBox_info_last(specialNum);
-            getFZ_1(i, time, amplitudeOrAngle);
-        }
+        getXB_2(i, time);
     }
 
-
-    function createBox_info(category) {
-
-        $(".pic").html($(".pic").html() +
-            "<table class=\"table table-bordered move\" id=\"box_info" + (i + 1) + "\" style=\"table-layout: fixed;\"> " +
-            "<thead><tr><th  width=\"40px\">分" + number[i] + "</th><th width=\"60px\">" + category[3 * i] + titleName[0] + "</th><th width=\"60px\">" + category[3 * i + 1] + titleName[0] + "</th><th width=\"60px\">" + category[3 * i + 2] + titleName[0] + "</th></tr></thead>" +
-            // "<tbody><tr><td><img src=\"http:\/\/latex.codecogs.com/gif.latex?\\overline{I}\" title=\"\\overline{I}\" /></td> " +
-            "<tbody><tr><td style=\"text-decoration:overline;\">I</td> " +
-            "<td>0</td><td>0</td><td>0</td>" +
-            // "</tr><tr><td><img src=\"http:\/\/latex.codecogs.com/gif.latex?3I_0\" title=\"3I_0\" /></td>" +
-            "</tr><tr><td>3I<sub>0</sub></td>" +
-            "<td>0</td><td>0</td><td>0</td>" +
-            // "</tr><tr><td><img src=\"http:\/\/latex.codecogs.com/gif.latex?I_{g1}\" title=\"I_{g1}\" /></td>" +
-            "</tr><tr><td>I<sub>g1</sub></td>" +
-            "<td>0</td><td>0</td><td>0</td>" +
-            // "</tr><tr><td><img src=\"http:\/\/latex.codecogs.com/gif.latex?I_{g2}\" title=\"I_{g2}\" /></td>" +
-            "</tr><tr><td>I<sub>g2</sub></td>" +
-            "<td>0</td><td>0</td><td>0</td></tr></tbody>");
-    }
-
-    //在createBox_info所产生的表格基础上删除数据列第一列
-    function createBox_info_first(category) {
-
-        $(".pic").html($(".pic").html() +
-            "<table class=\"table table-bordered move\" id=\"box_info" + (i + 1) + "\" style=\"table-layout: fixed;\"> " +
-            "<thead><tr><th  width=\"40px\">分" + number[i] + "</th><th width=\"60px\">" + category[3 * i + 1] + titleName[0] + "</th><th width=\"60px\">" + category[3 * i + 2] + titleName[0] + "</th></tr></thead>" +
-            // "<tbody><tr><td><img src=\"http:\/\/latex.codecogs.com/gif.latex?\\overline{I}\" title=\"\\overline{I}\" /></td> " +
-            "<tbody><tr><td style=\"text-decoration:overline;\">I</td> " +
-            "<td>0</td><td>0</td>" +
-            // "</tr><tr><td><img src=\"http:\/\/latex.codecogs.com/gif.latex?3I_0\" title=\"3I_0\" /></td>" +
-            "</tr><tr><td>3I<sub>0</sub></td>" +
-            "<td>0</td><td>0</td>" +
-            // "</tr><tr><td><img src=\"http:\/\/latex.codecogs.com/gif.latex?I_{g1}\" title=\"I_{g1}\" /></td>" +
-            "</tr><tr><td>I<sub>g1</sub></td>" +
-            "<td>0</td><td>0</td>" +
-            // "</tr><tr><td><img src=\"http:\/\/latex.codecogs.com/gif.latex?I_{g2}\" title=\"I_{g2}\" /></td>" +
-            "</tr><tr><td>I<sub>g2</sub></td>" +
-            "<td>0</td><td>0</td></tr></tbody>");
-    }
-
-    //在createBox_info所产生的表格基础上删除数据列最后一列
-    function createBox_info_last(category) {
-
-        $(".pic").html($(".pic").html() +
-            "<table class=\"table table-bordered move\" id=\"box_info" + (i + 1) + "\" style=\"table-layout: fixed;\"> " +
-            "<thead><tr><th  width=\"40px\">分" + number[i] + "</th><th width=\"60px\">" + category[3 * i + 0] + titleName[0] + "</th><th width=\"60px\">" + category[3 * i + 1] + titleName[0] + "</th></tr></thead>" +
-            "<tbody><tr><td style=\"text-decoration:overline;\">I</td> " +
-            "<td>0</td><td>0</td>" +
-            "</tr><tr><td>3I<sub>0</sub></td>" +
-            "<td>0</td><td>0</td>" +
-            "</tr><tr><td>I<sub>g1</sub></td>" +
-            "<td>0</td><td>0</td>" +
-            "</tr><tr><td>I<sub>g2</sub></td>" +
-            "<td>0</td><td>0</td></tr></tbody>");
-    }
-
-    //在createBox_info所产生的表格基础上删除数据列中间列
-    function createBox_info_middle(category) {
-
-        $(".pic").html($(".pic").html() +
-            "<table class=\"table table-bordered move\" id=\"box_info" + (i + 1) + "\" style=\"table-layout: fixed;\"> " +
-            "<thead><tr><th  width=\"40px\">分" + number[i] + "</th><th width=\"60px\">" + category[3 * i + 0] + titleName[0] + "</th><th width=\"60px\">" + category[3 * i + 2] + titleName[0] + "</th></tr></thead>" +
-            "<tbody><tr><td style=\"text-decoration:overline;\">I</td> " +
-            "<td>0</td><td>0</td>" +
-            "</tr><tr><td>3I<sub>0</sub></td>" +
-            "<td>0</td><td>0</td>" +
-            "</tr><tr><td>I<sub>g1</sub></td>" +
-            "<td>0</td><td>0</td>" +
-            "</tr><tr><td>I<sub>g2</sub></td>" +
-            "<td>0</td><td>0</td></tr></tbody>");
-    }
-
-    $(".box").click(function() {
-
-        $("#compare").animate({ right: "0" });
-
-        if (count >= 12) {
-
-            $("#mymodal").modal("toggle");
-        } else {
-
-            count = count + 4;
-            var order = $(this).attr("order");
-            getFZ_2(order, time);
-        }
-    });
-
-    $(".flag").click(function() {
-
-        $("#compare").animate({ right: "0" });
-
-        if (count >= 12) {
-
-            $("#mymodal").modal("toggle");
-        } else {
-
-            var order = $(this).attr("order");
-            if (order == 11) { order = 200; }
-            count = count + 3;
-            getXB_2(order, time);
-        }
-    });
-
+    // 显示相应的图层颜色
+    // 点击线路显示其电流值（转到树状图中显示）
+    //   $(".box").click(function () {
+    //     if (count >= 12) {
+    //       $("#mymodal").modal("toggle");
+    //     } else {
+    //       count = count + 4;
+    //       var order = $(this).attr("order");
+    //       getXB_2(order, time);
+    //     }
+    //   });
 }
 
+// 绑定点击查看异常报警，并提供搜索方法
 $(function() {
     $("#alarm").click(function() {
         getAlarm("", "");
@@ -279,22 +100,7 @@ $(function() {
 })
 
 
-// 获取异常列表（删）
-
-$(function() {
-
-    $(":radio").click(function() {
-
-        if ($(this).val() == "amplitude") {
-            window.amplitudeOrAngle = true;
-            Refresh(window.time, amplitudeOrAngle);
-        } else {
-            window.amplitudeOrAngle = false;
-            Refresh(window.time, amplitudeOrAngle);
-        }
-    });
-});
-
+// 获取异常列表方法（删）
 
 
 $(function() {
@@ -307,7 +113,6 @@ $(function() {
     // });
 
     $("#search").click(function() {
-
         getWarningListFun($("#dtp_input_1").val(), "");
     });
 });
@@ -399,6 +204,7 @@ function getWarningListFun(ErrorTime, ErrorLine) {
     })
 }
 
+// 对出错电流的绘图
 function errorC(x1, x2, x3, time, div) {
 
     window.myChart1 = echarts.init(document.getElementById(div));
@@ -506,7 +312,7 @@ function errorV(x1, x2, x3, time, div) {
 
 $(function() {
     // 删掉了介损角信息的图表\钠图表
-
+    // 点击I 显示电流的历史情况
     $("#content").on("click", ".I_history", function() {
         $("#line_loss_chart").modal("toggle");
         drawI_history(window.time, $(this).attr("order"));
@@ -594,6 +400,7 @@ function drawI_history(time, id) {
 }
 
 
+// 获取设备名称
 function GetDeviceID(ID) {
 
     var result = ID;
@@ -627,6 +434,7 @@ function backID(name) {
 for (var i = 1; i < 5; i++) $("#show" + i).draggable();
 
 $(function() { $('#warningList').on('hide.bs.modal', function() { window.chartCount = 0; }) });
+// 点击异常信息弹窗关闭后的事件
 $(function() {
     $('#show1').on('hide.bs.modal', function() {
         myArray[1] = 0;
@@ -652,6 +460,7 @@ $(function() {
     })
 });
 
+// show方法触动后，显示弹窗的事件
 $(document).on('show.bs.modal', '.modal', function(event) {
     $(this).appendTo($('body'));
 }).on('shown.bs.modal', '.modal.in', function(event) {
@@ -660,8 +469,7 @@ $(document).on('show.bs.modal', '.modal', function(event) {
     setModalsAndBackdropsOrder();
 });
 
-//////////////
-
+// 设置弹出模块，并进行相应信息设置
 function setModalsAndBackdropsOrder() {
     var modalZIndex = 1040;
     $('.modal.in').each(function(index) {
@@ -709,6 +517,7 @@ function getAlarm(data, time) {
             $("#list_2 table tbody tr").click(function(e) {
                 var ErrorTime = $(this).children().eq(4)[0].innerHTML;
                 window.timeout = true;
+                // 获取该异常对应情况下的数据信息，并进行显示
                 Refresh(ErrorTime, amplitudeOrAngle);
 
                 $("#warningList_2").modal("toggle");

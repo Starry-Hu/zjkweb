@@ -9,44 +9,6 @@
     <link rel="stylesheet" type="text/css" href="../css/bootstrap-switch.css">
     <link href="../css/bootstrap-datetimepicker.min.css" rel="stylesheet" media="screen">
     <link rel="stylesheet" type="text/css" href="../css/magic-check.css">
-
-    <style type="text/css">
-        .move {
-            width: 210px;
-            position: absolute;
-            left: 100px;
-        }
-        
-        .XB {
-            width: 100px;
-        }
-        
-        .mycharts {
-            width: 570px;
-            height: 300px;
-        }
-        
-        #list1 th,
-        #list_2 th {
-            text-align: center;
-        }
-        
-        #move9,
-        #flag9 {
-            display: none;
-        }
-        
-        #compare table {
-            width: 90%!important;
-            margin: 0 auto!important;
-        }
-        
-        body,
-        html {
-            min-width: 1308px;
-            overflow: auto;
-        }
-    </style>
 </head>
 
 <body>
@@ -54,19 +16,9 @@
     <div id="loading">
         <img src="../img/loading.gif">
     </div>
-    <!-- <div class="col">
-        <div class="opt">
-            <input class="magic-radio" type="radio" name="radio" id="r1" value="amplitude" checked>
-            <label for="r1">模值</label>
-        </div>
-        <div class="opt">
-            <input class="magic-radio" type="radio" name="radio" id="r2" value="angle">
-            <label for="r2">相角</label>
-        </div>
-    </div> -->
 
     <!-- 自动刷新or查找某时刻的信息 -->
-    <!-- <div id="switch">
+    <div id="switchContainer">
         <div class="switch">
             <input type="checkbox" data-on-text="手动选择" data-off-text="自动刷新" checked />
         </div>
@@ -82,10 +34,10 @@
                 </div>
             </form>
             <button class="btn btn-sm btn-primary" id="up_hour" style="margin-left: -14px;margin-top: -10px;">上一小时</button>
-            <button class="btn btn-sm btn-primary" id="down_hour" style="margin-top: -10px;">下一小时</button> -->
+            <button class="btn btn-sm btn-primary" id="down_hour" style="margin-top: -10px;">下一小时</button>
 
-    <!-- 加上六个按钮，对一小时内的六个段点击查询 -->
-    <!-- <div class="m-style M-box">
+            <!-- 加上六个按钮，对一小时内的六个段点击查询 -->
+            <div class="m-style M-box">
                 <span class="active">1</span>
                 <a href="javascript:;" data-page="2">2</a>
                 <a href="javascript:;" data-page="3">3</a>
@@ -95,21 +47,28 @@
             </div>
         </div>
 
-        <button class="btn btn-lg btn-warning" id="getWarning">异常列表</button>
-        <button class="btn btn-lg btn-danger" id="alarm">异常报警</button> -->
+        <button class="btn btn-lg btn-danger" id="alarm">异常报警</button>
+    </div>
 
     <!--  在底图上设置动态的覆盖图层进行显示 -->
-    <!-- <div class="pic" id="content">
-            <div class="flag" order="1" id="flag1"></div>
-            <div class="flag" order="2" id="flag2"></div>
-            <div class="flag" order="6" id="flag6"></div>
-            <div class="flag" order="8" id="flag8"></div>
-            <div class="flag" order="9" id="flag9"></div>
-            <div class="flag" order="10" id="flag10"></div>
-            <div class="flag" order="11" id="flag11"></div> -->
-    <!-- 升压站浮层 -->
-    <!-- 
-            <div class="box box_v" order="2" id="box1_2"></div>
+    <div class="pic" id="content">
+        <!-- 变电站的状态图层 -->
+        <div class="flag" order="0" id="flag0"></div>
+        <div class="flag" order="1" id="flag1"></div>
+        <div class="flag" order="2" id="flag2"></div>
+        <div class="flag" order="3" id="flag3"></div>
+        <div class="flag" order="4" id="flag4"></div>
+        <div class="flag" order="5" id="flag5"></div>
+        <div class="flag" order="6" id="flag6"></div>
+        <div class="flag" order="7" id="flag7"></div>
+        <div class="flag" order="8" id="flag8"></div>
+        <div class="flag" order="9" id="flag9"></div>
+        <div class="flag" order="10" id="flag10"></div>
+
+        <!-- 升压站浮层 -->
+
+        <!-- 线路状态图层 -->
+        <!-- <div class="box box_v" order="2" id="box1_2"></div>
             <div class="box box_h" order="3" id="box1_3"></div>
             <div class="box box_h" order="4" id="box2_3"></div>
             <div class="box box_v" order="5" id="box2_4"></div>
@@ -124,48 +83,22 @@
             <div class="box box_h" order="23" id="box8_15"></div>
             <div class="box box_v" order="24" id="box8_16"></div> -->
 
-    <!-- 删除了“介” “钠”的显示 -->
-    <!-- <div class="I_history" id="I_history2" order="2">I</div>
-            <div class="I_history" id="I_history3" order="3">I</div>
-            <div class="I_history" id="I_history4" order="4">I</div>
-            <div class="I_history" id="I_history5" order="5">I</div>
-            <div class="I_history" id="I_history6" order="6">I</div>
-            <div class="I_history" id="I_history7" order="7">I</div>
-            <div class="I_history" id="I_history8" order="8">I</div>
-            <div class="I_history" id="I_history9" order="9">I</div>
-            <div class="I_history" id="I_history13" order="13">I</div>
-            <div class="I_history" id="I_history14" order="14">I</div>
-            <div class="I_history" id="I_history15" order="15">I</div>
-            <div class="I_history" id="I_history16" order="16">I</div>
-            <div id="station"></div> -->
-    <!-- 升压站底图，由于升压站是新增的，因此不在大的底图上 -->
-    <!-- </div> -->
+        <!-- 删除了“介” “钠”的显示，只保留电流的显示 -->
+        <!-- <div class="I_history" id="I_history2" order="2">I</div>
+        <div class="I_history" id="I_history3" order="3">I</div>
+        <div class="I_history" id="I_history4" order="4">I</div>
+        <div class="I_history" id="I_history5" order="5">I</div>
+        <div class="I_history" id="I_history6" order="6">I</div>
+        <div class="I_history" id="I_history7" order="7">I</div>
+        <div class="I_history" id="I_history8" order="8">I</div>
+        <div class="I_history" id="I_history9" order="9">I</div>
+        <div class="I_history" id="I_history13" order="13">I</div>
+        <div class="I_history" id="I_history14" order="14">I</div>
+        <div class="I_history" id="I_history15" order="15">I</div>
+        <div class="I_history" id="I_history16" order="16">I</div> -->
 
-    <!-- 右侧弹窗列表显示 -->
-    <!-- <div id="compare" style="height: 100%;width: 400px;float: right;border-left: 2px solid #8e8e8e; position: fixed;right: -400px;top: 0;overflow: auto;">
-            <div style="width: 90%;margin: 0 auto;">
-                <button class="btn btn-lg btn-primary" id="clear" type="button" onclick="clearcontent()">清空</button>
-                <button class="btn btn-lg btn-danger" id="off" onclick="disappear()">关闭</button>
-            </div>
-        </div> -->
-
-    <!-- <div class="modal" id="mymodal" tabindex="-1">
-            <div class="modal-dialog">
-                <div class="modal-content">
-                    <div class="modal-header">
-                        <button type="button" class="close" data-dismiss="modal"><span aria-hidden="true">&times;</span><span class="sr-only">Close</span></button>
-                        <h4 class="modal-title">提示</h4>
-                    </div>
-                    <div class="modal-body">
-                        <p>右侧列表已满，请将右侧列表清除后再试</p>
-                    </div>
-                    <div class="modal-footer">
-                        <button type="button" class="btn btn-default" data-dismiss="modal">关闭</button>
-                    </div>
-                </div>
-            </div>
-        </div> -->
-    <!-- 删除了黄色的异常列表 -->
+        <div id="tableInfo"> </div>
+    </div>
 
     <!-- 点击异常报警后的弹出框 -->
     <div class="modal" id="warningList" tabindex="-1">
@@ -271,7 +204,7 @@
     <!-- /.modal -->
 
 
-
+    <!-- 显示电流的历史曲线 -->
     <div class="modal" id="line_loss_chart" tabindex="-1">
         <div class="modal-dialog" style="width:1200px">
             <div class="modal-content">
@@ -290,7 +223,7 @@
     <!-- /.modal -->
 
 
-    <!-- 四个能够弹出地异常列表 -->
+    <!-- 四个能够弹出的异常列表 -->
     <div class="modal" id='show1' data-backdrop="static" style="width: 600px;height: 450px;">
         <div class="modal-dialog">
             <div class="modal-content">

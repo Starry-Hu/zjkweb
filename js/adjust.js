@@ -1,6 +1,7 @@
+// 适配火狐浏览器
 (function(targetWidth = 1920) {
         const isFox =
-          navigator.userAgent.indexOf('Firefox') > -1 ? true : false;
+            navigator.userAgent.indexOf('Firefox') > -1 ? true : false;
         const style = document.createElement('style');
         style.innerHTML = `
         html {

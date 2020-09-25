@@ -1,0 +1,33 @@
+* {
+    margin: 0;
+    padding: 0;
+}
+
+html,
+body {
+    height: 100%;
+}
+
+.content {
+    height: 93%;
+    width: 98%;
+    margin: 0 auto;
+    position: relative;
+    top: -5%;
+}
+
+#current1 {
+    height: 49%;
+    width: 100%;
+}
+
+#current2 {
+    margin-top: 2%;
+    height: 49%;
+    width: 100%;
+}
+
+#current3 {
+    height: 60%;
+    width: 100%;
+}

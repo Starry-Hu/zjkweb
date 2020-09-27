@@ -8,12 +8,39 @@
         height: 100%;
         min-width: 1308px;
         overflow: auto;
+        /* position: relative; */
     }
     
     table td {
         font-family: "Times New Roman", Georgia, Serif;
         font-weight: bold;
         text-align: center;
+    }
+    /* 解决boostrap点击弹窗后抖动现象 */
+    
+    .modal-open {
+        overflow-y: auto !important;
+        padding-right: 0 !important;
+    }
+    /* 修改按钮的背景色和边框 */
+    
+    .btn-primary {
+        background-color: #01AAED!important;
+        border: none!important;
+    }
+    
+    .btn-primary:active,
+    .btn-primary.active,
+    .btn-primary:focus,
+    .btn-primary.focus {
+        background-color: #337ab7 !important;
+        border: none !important;
+        outline: none !important;
+    }
+    
+    .btn:hover,
+    .btn:focus {
+        outline: none !important;
     }
     
     #loading {
@@ -31,12 +58,13 @@
         display: inline-block;
         width: 300px;
     }
+    /* 自动刷新or查找某时刻的信息的样式 */
     
     #switchContainer {
         width: 500px;
         position: absolute;
         right: 20%;
-        top: 5%;
+        top: 2%;
         z-index: 99;
     }
     
@@ -51,6 +79,14 @@
 	height:40px;
 	line-height:40px
 }*/
+    /* 在一个小时中的六个时间段再选择 */
+    
+    .minuteChoose {
+        width: 30px;
+        height: 30px;
+        display: inline-block;
+        cursor: pointer;
+    }
     
     .opt {
         height: 30px;
@@ -60,8 +96,8 @@
     
     #alarm {
         position: absolute;
-        right: 27%;
-        top: 5%;
+        right: 22%;
+        top: 2%;
         z-index: 999;
     }
     
@@ -114,7 +150,7 @@
         /* left: -100px;
     top: -120px; */
         z-index: 1;
-        /* transform: scale(0.8, 0.8); */
+        /* transform: scale(0.9, 0.9); */
         margin: 0 auto;
     }
     /* 表格的样式 */

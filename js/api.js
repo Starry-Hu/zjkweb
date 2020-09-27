@@ -413,7 +413,8 @@ function fillXB_2(id, array, time) {
                 temp[i][j] = "——";
         }
     }
-
+    // 到该渲染的时候再移除，解决抖动问题
+    $('#table_info' + id).remove();
     $("#tableInfo").html($("#tableInfo").html() +
         "<table class=\"table table-bordered table-striped table-hover XBdetail detail \" id=\"table_info" + id + "\"  time=\"" + time + "\"  order=\"" + id + "\"><thead><tr>" +
         "<th width=\"75px\">&nbsp;&nbsp;&nbsp;#" + id + "</th>" +
@@ -425,6 +426,7 @@ function fillXB_2(id, array, time) {
         "<td style='color:" + temp[2][2] + "'>" + temp[2][0] + "</td><td style='color:" + temp[2][2] + "'>" + temp[2][1] + "</td></tr><tr><td>3U<sub>0</sub></td>" +
         "<td style='color:" + temp[3][2] + "'>" + temp[3][0] + "</td><td style='color:" + temp[3][2] + "'>" + temp[3][1] + "</td></tr></tbody></table>"
     );
+
 
     // 绘制图层状态颜色
     $("#flag" + id).css({ "background-color": temp[0][2] });

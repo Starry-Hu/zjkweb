@@ -13,41 +13,116 @@ window.myArray = [0, 0, 0, 0, 0];
 
 // 手动、自动按钮切换函数
 $(function() {
-
     $("#loading").hide();
-    $('.switch input').bootstrapSwitch({
-
+    $(".switch input").bootstrapSwitch({
         onColor: "success",
         offColor: "warning",
         onSwitchChange: function(event, state) {
-
+            // 切换到手动选择阶段
             if (state == true) {
-
                 window.timeout = true;
 
                 $("#container1").css("display", "block");
-                $('#datetime1').datetimepicker().on('changeDate', function(ev) {
+                // 选择时间
+                $("#datetime1")
+                    .datetimepicker()
+                    .on("changeDate", function(ev) {
+                        // 获取选择的时间，并以当前时间去刷新界面；同时提供六个分钟时间段的选择按钮
+                        window.time = $("#form-control1").val();
+                        if (window.time != "") {
+                            setTimeout(function() {
+                                Refresh(window.time, amplitudeOrAngle);
+                            }, 100);
+                        }
+                    });
 
-                    window.time = $("#form-control1").val();
+                // 绑定每个小时中六个时间段的选择
+                $(".minuteChoose").click(function() {
+                    // 提示先选择相应的时间，之后才允许点击分钟段
+                    if ($("#form-control1").val() == "") {
+                        $("#minuteModal").modal("toggle");
+                    } else {
+                        // 获取选择的时间，并以当前时间去刷新界面
+                        $("#form-control1").val(
+                            $("#form-control1").val().substr(0, 14) + $(this).attr("minute")
+                        );
 
-                    if (window.time != "") {
-
+                        window.time = $("#form-control1").val();
+                        $(".minuteChoose").removeClass("active");
+                        $(this).addClass("active");
                         setTimeout(function() {
-
                             Refresh(window.time, amplitudeOrAngle);
-                        }, 100)
+                        }, 100);
                     }
                 });
-            } else {
+            }
+            // 自动刷新的实现
+            else {
                 $("#container1").css("display", "none");
 
                 window.timeout = false;
                 window.time = myDate.getFullYear() + "-" + (myDate.getMonth() + 1) + "-" + myDate.getDate() + " " + myDate.getHours() + ":" + myDate.getMinutes() + ":" + myDate.getSeconds();
                 interval();
             }
-        }
+        },
     });
-    $('.switch input').bootstrapSwitch('toggleState', true);
+    $(".switch input").bootstrapSwitch("toggleState", true);
+
+    // 上一小时、下一小时的事件绑定
+    $("#up_hour").click(function() {
+        if ($("#form-control1").val() == "") {
+            var myDate = new Date();
+            var year = myDate.getFullYear(); //获取当前年
+            var month = myDate.getMonth() + 1; //获取当前月
+            var date = myDate.getDate(); //获取当前日
+            var h = myDate.getHours() - 1; //获取当前小时数(0-23)
+            tmp = year + "-" + getNow(month) + "-" + getNow(date) + " " + getNow(h) + ":00";
+        } else {
+            var str = $("#form-control1").val();
+            var aPos = str.indexOf(" ");
+            var bPos = str.indexOf(":");
+            var r = str.substr(aPos + 1, bPos - aPos - 1);
+            var h = parseInt(r) - 1;
+            tmp = $("#form-control1").val().substr(0, aPos) + " " + getNow(h) + ":00";
+        }
+        // 进行相应的内容设置
+        $(".minuteChoose").removeClass("active");
+        $(".minuteChoose").eq(0).addClass("active");
+        $("#form-control1").val(tmp);
+        window.time = tmp;
+        setTimeout(function() {
+            Refresh(window.time, amplitudeOrAngle);
+        }, 100);
+    });
+
+    $("#down_hour").click(function() {
+        var tmp;
+
+        if ($("#form-control1").val() == "") {
+            var myDate = new Date();
+            var year = myDate.getFullYear(); //获取当前年
+            var month = myDate.getMonth() + 1; //获取当前月
+            var date = myDate.getDate(); //获取当前日
+            var h = myDate.getHours() + 1; //获取当前小时数(0-23)
+            tmp = year + "-" + getNow(month) + "-" + getNow(date) + " " + getNow(h) + ":00";
+
+        } else {
+            var str = $("#form-control1").val();
+            var aPos = str.indexOf(" ");
+            var bPos = str.indexOf(":");
+            var r = str.substr(aPos + 1, bPos - aPos - 1);
+            var h = parseInt(r) + 1;
+            tmp = $("#form-control1").val().substr(0, aPos) + " " + getNow(h) + ":00";
+        }
+        // 进行相应的内容设置
+        $(".minuteChoose").removeClass("active");
+        $(".minuteChoose").eq(0).addClass("active");
+        $("#form-control1").val(tmp);
+        window.time = tmp;
+        setTimeout(function() {
+            Refresh(window.time, amplitudeOrAngle);
+        }, 100);
+    });
 });
 
 function interval() {
@@ -65,7 +140,7 @@ $(document).ready(function() {
 });
 
 function Refresh(time, amplitudeOrAngle) {
-    $("#tableInfo table").remove();
+    // $("#tableInfo table").remove();
 
     //....................................................分支箱表格绘制...............................................................
 
@@ -98,9 +173,6 @@ $(function() {
         getAlarm($("#deviceIDs").val(), $("#dtp_input_2").val());
     })
 })
-
-
-// 获取异常列表方法（删）
 
 
 $(function() {

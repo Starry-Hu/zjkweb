@@ -12,46 +12,67 @@
 </head>
 
 <body>
-
     <div id="loading">
         <img src="../img/loading.gif">
     </div>
 
-    <!-- 自动刷新or查找某时刻的信息 -->
-    <div id="switchContainer">
-        <div class="switch">
-            <input type="checkbox" data-on-text="手动选择" data-off-text="自动刷新" checked />
-        </div>
-        <div class="container" style="width: 650px;display: none;" id="container1">
-            <form action="" class="form-horizontal" role="form">
-                <div class="form-group">
-                    <div class="input-group date form_datetime col-md-5" data-date="2018-09-01T05:25:00" data-date-format="dd MM yyyy - HH:ii p" data-link-field="dtp_input1" id="datetime1">
-                        <input class="form-control" size="16" type="text" value="" readonly placeholder="请手动选择日期" id="form-control1">
-                        <span class="input-group-addon"><span class="glyphicon glyphicon-remove"></span></span>
-                        <span class="input-group-addon"><span class="glyphicon glyphicon-th"></span></span>
-                    </div>
-                    <input type="hidden" id="dtp_input1" value="" />
-                </div>
-            </form>
-            <button class="btn btn-sm btn-primary" id="up_hour" style="margin-left: -14px;margin-top: -10px;">上一小时</button>
-            <button class="btn btn-sm btn-primary" id="down_hour" style="margin-top: -10px;">下一小时</button>
+    <div class="pic" id="content">
 
-            <!-- 加上六个按钮，对一小时内的六个段点击查询 -->
-            <div class="m-style M-box">
-                <span class="active">1</span>
-                <a href="javascript:;" data-page="2">2</a>
-                <a href="javascript:;" data-page="3">3</a>
-                <a href="javascript:;" data-page="4">4</a>
-                <a href="javascript:;" data-page="5">5</a>
-                <a href="javascript:;" data-page="6">6</a>
+        <!-- 自动刷新or查找某时刻的信息 -->
+        <div id="switchContainer">
+            <div class="switch">
+                <input type="checkbox" data-on-text="手动选择" data-off-text="自动刷新" checked />
+            </div>
+            <div class="container" style="width: 650px;display: none;" id="container1">
+                <form action="" class="form-horizontal" role="form">
+                    <div class="form-group">
+                        <div class="input-group date form_datetime col-md-5" data-date="2018-09-01T05:25:00" data-date-format="dd MM yyyy - HH:ii p" data-link-field="dtp_input1" id="datetime1">
+                            <input class="form-control" size="16" type="text" value="" readonly placeholder="请手动选择日期" id="form-control1">
+                            <span class="input-group-addon"><span class="glyphicon glyphicon-remove"></span></span>
+                            <span class="input-group-addon"><span class="glyphicon glyphicon-th"></span></span>
+                        </div>
+                        <input type="hidden" id="dtp_input1" value="" />
+                    </div>
+                </form>
+                <button class="btn btn-sm btn-primary" id="up_hour" style="margin-left: -14px;margin-top: -10px;">上一小时</button>
+                <button class="btn btn-sm btn-primary" id="down_hour" style="margin-top: -10px;">下一小时</button>
+
+                <!-- 加上六个按钮，对一小时内的六个段点击查询 -->
+                <div style="margin-top: 10px; margin-left: -15px;">
+                    <button class="minuteChoose active btn btn-sm btn-primary" minute="00">:00</button>
+                    <button class="minuteChoose btn btn-sm btn-primary" minute="10">:10</button>
+                    <button class="minuteChoose btn btn-sm btn-primary" minute="20">:20</button>
+                    <button class="minuteChoose btn btn-sm btn-primary" minute="30">:30</button>
+                    <button class="minuteChoose btn btn-sm btn-primary" minute="40">:40</button>
+                    <button class="minuteChoose btn btn-sm btn-primary" minute="50">:50</button>
+                </div>
+            </div>
+
+            <!-- 显示时间段按钮不可用的弹出框 -->
+            <div class="modal" id="minuteModal" tabindex="-1" style="display: none; z-index: 1041;">
+                <div class="modal-dialog">
+                    <div class="modal-content">
+                        <div class="modal-header">
+                            <button type="button" class="close" data-dismiss="modal"><span
+                                    aria-hidden="true">×</span><span class="sr-only">Close</span></button>
+                            <h4 class="modal-title">提示</h4>
+                        </div>
+                        <div class="modal-body">
+                            <p>请先选择具体时间后再选择分钟段</p>
+                        </div>
+                        <div class="modal-footer">
+                            <button type="button" class="btn btn-default" data-dismiss="modal">关闭</button>
+                        </div>
+                    </div>
+                </div>
             </div>
         </div>
 
-        <button class="btn btn-lg btn-danger" id="alarm">异常报警</button>
-    </div>
 
-    <!--  在底图上设置动态的覆盖图层进行显示 -->
-    <div class="pic" id="content">
+        <!-- 异常报警按钮 -->
+        <button class="btn btn-lg btn-danger" id="alarm">异常报警</button>
+
+        <!--  在底图上设置动态的覆盖图层进行显示 -->
         <!-- 变电站的状态图层 -->
         <div class="flag" order="0" id="flag0"></div>
         <div class="flag" order="1" id="flag1"></div>
@@ -105,7 +126,8 @@
         <div class="modal-dialog" style="width:800px">
             <div class="modal-content">
                 <div class="modal-header">
-                    <button type="button" class="close" data-dismiss="modal"><span aria-hidden="true">&times;</span><span class="sr-only">Close</span></button>
+                    <button type="button" class="close" data-dismiss="modal"><span
+                            aria-hidden="true">&times;</span><span class="sr-only">Close</span></button>
                     <h4 class="modal-title"></h4>
                 </div>
                 <div class="modal-body">
@@ -123,10 +145,12 @@
                                 <div class="form-group">
                                     <div class="input-group date form_datetime col-md-5" data-date-format="dd MM yyyy - HH:ii" data-link-field="dtp_input_1" id="datetime2">
                                         <input class="form-control" size="16" type="text" value="" readonly placeholder="请手动选择日期" id="form-control2">
-                                        <span class="input-group-addon"><span class="glyphicon glyphicon-remove"></span></span>
-                                        <span class="input-group-addon"><span class="glyphicon glyphicon-th"></span></span>
+                                        <span class="input-group-addon"><span
+                                                class="glyphicon glyphicon-remove"></span></span>
+                                        <span class="input-group-addon"><span
+                                                class="glyphicon glyphicon-th"></span></span>
                                     </div>
-                                    <input type="hidden" id="dtp_input_1" value="" /><br/>
+                                    <input type="hidden" id="dtp_input_1" value="" /><br />
                                 </div>
                             </form>
                         </div>
@@ -146,7 +170,8 @@
         <div class="modal-dialog" style="width:1000px">
             <div class="modal-content">
                 <div class="modal-header">
-                    <button type="button" class="close" data-dismiss="modal"><span aria-hidden="true">&times;</span><span class="sr-only">Close</span></button>
+                    <button type="button" class="close" data-dismiss="modal"><span
+                            aria-hidden="true">&times;</span><span class="sr-only">Close</span></button>
                     <h4 class="modal-title">异常报警</h4>
                 </div>
                 <div class="modal-body">
@@ -157,27 +182,27 @@
                         <div class="form-group">
                             <!-- onmousedown="if(this.options.length>4){this.size=5}" onblur="this.size=1" onchange="this.size=1" id="deviceIDs" -->
                             <select class="form-control" id="deviceIDs">
-							<option value="">请选择设备号</option>
-				            <option value="23">箱变一</option> 
-				            <option value="26">箱变二</option> 
-				            <option value="24">箱变八</option> 
-				            <option value="25">箱变十</option> 
-				            <option value="21">箱变六</option> 
-				            <option value="1">分支箱一2号线</option>  
-				            <option value="2">分支箱一3号线</option>  
-				            <option value="4">分支箱二3号线</option>  
-				            <option value="3">分支箱二4号线</option>  
-				            <option value="14">分支箱三5号线</option>  
-				            <option value="13">分支箱三13号线</option>  
-				            <option value="6">分支箱四6号线</option>  
-				            <option value="5">分支箱四7号线</option>  
-				            <option value="8">分支箱五8号线</option>  
-				            <option value="7">分支箱五9号线</option>  
-				            <option value="10">分支箱七13号线</option>  
-				            <option value="9">分支箱七14号线</option>  
-				            <option value="12">分支箱八15号线</option>  
-				            <option value="11">分支箱八16号线</option>  
-						</select>
+                                <option value="">请选择设备号</option>
+                                <option value="23">箱变一</option>
+                                <option value="26">箱变二</option>
+                                <option value="24">箱变八</option>
+                                <option value="25">箱变十</option>
+                                <option value="21">箱变六</option>
+                                <option value="1">分支箱一2号线</option>
+                                <option value="2">分支箱一3号线</option>
+                                <option value="4">分支箱二3号线</option>
+                                <option value="3">分支箱二4号线</option>
+                                <option value="14">分支箱三5号线</option>
+                                <option value="13">分支箱三13号线</option>
+                                <option value="6">分支箱四6号线</option>
+                                <option value="5">分支箱四7号线</option>
+                                <option value="8">分支箱五8号线</option>
+                                <option value="7">分支箱五9号线</option>
+                                <option value="10">分支箱七13号线</option>
+                                <option value="9">分支箱七14号线</option>
+                                <option value="12">分支箱八15号线</option>
+                                <option value="11">分支箱八16号线</option>
+                            </select>
                         </div>
                         <div class="container" style="width: 600px;" id="container_2">
                             <form action="" class="form-horizontal" role="form">
@@ -185,10 +210,12 @@
                                 <div class="form-group">
                                     <div class="input-group date form_datetime col-md-5" data-date-format="dd MM yyyy - HH:ii p" data-link-field="dtp_input_2" id="datetime_2">
                                         <input class="form-control" size="16" type="text" value="" readonly placeholder="请手动选择日期" id="form-control_2">
-                                        <span class="input-group-addon"><span class="glyphicon glyphicon-remove"></span></span>
-                                        <span class="input-group-addon"><span class="glyphicon glyphicon-th"></span></span>
+                                        <span class="input-group-addon"><span
+                                                class="glyphicon glyphicon-remove"></span></span>
+                                        <span class="input-group-addon"><span
+                                                class="glyphicon glyphicon-th"></span></span>
                                     </div>
-                                    <input type="hidden" id="dtp_input_2" value="" /><br/>
+                                    <input type="hidden" id="dtp_input_2" value="" /><br />
                                 </div>
                             </form>
                         </div>
@@ -209,7 +236,8 @@
         <div class="modal-dialog" style="width:1200px">
             <div class="modal-content">
                 <div class="modal-header">
-                    <button type="button" class="close" data-dismiss="modal"><span aria-hidden="true">&times;</span><span class="sr-only">Close</span></button>
+                    <button type="button" class="close" data-dismiss="modal"><span
+                            aria-hidden="true">&times;</span><span class="sr-only">Close</span></button>
                     <h4 class="modal-title">历史信息</h4>
                 </div>
                 <div class="modal-body">
@@ -221,6 +249,7 @@
         <!-- /.modal-dialog -->
     </div>
     <!-- /.modal -->
+
 
 
     <!-- 四个能够弹出的异常列表 -->
@@ -303,7 +332,7 @@
     var h = myDate.getHours(); //获取当前小时数(0-23)
     var m = myDate.getMinutes(); //获取当前分钟数(0-59)
     var s = myDate.getSeconds();
-    var now = year + '-' + getNow(month) + "-" + getNow(date) + " " + getNow(h) + ':' + getNow(m) + ":" + getNow(s);
+    var now = year + '-' + getNow(month) + "-" + getNow(date) + "" + getNow(h) + ':' + getNow(m) + ":" + getNow(s);
 
     $("#datetime1").attr("data-date", now);
     $("#datetime2").attr("data-date", now);
@@ -312,7 +341,8 @@
     function clearcontent() {
         count = 0;
         $("#compare").html("");
-        $("#compare").html("<div style=\"width: 90%;margin: 0 auto;\">" + "<button class=\"btn btn-lg btn-primary\" id=\"clear\" onclick=\"clearcontent()\">清空</button>" +
+        $("#compare").html("<div style=\"width: 90%;margin: 0 auto;\">" +
+            "<button class=\"btn btn-lg btn-primary\" id=\"clear\" onclick=\"clearcontent()\">清空</button>" +
             "<button  class=\"btn btn-lg btn-danger\" id=\"off\" onclick=\"disappear()\">关闭</button>" + "</div>");
     }
 
@@ -349,57 +379,6 @@
                 $(".bootstrap-switch .bootstrap-switch-label").css("white-space", "nowrap");
             }
         }, 200);
-
-        $("#up_hour").click(function() {
-
-            if ($('#form-control1').val() == "") {
-                var myDate = new Date();
-                var year = myDate.getFullYear(); //获取当前年
-                var month = myDate.getMonth() + 1; //获取当前月
-                var date = myDate.getDate(); //获取当前日
-                var h = myDate.getHours() - 1; //获取当前小时数(0-23)
-                tmp = year + '-' + getNow(month) + "-" + getNow(date) + " " + getNow(h) + ":00";
-
-            } else {
-                var str = $('#form-control1').val();
-                var aPos = str.indexOf(' ');
-                var bPos = str.indexOf(':');
-                var r = str.substr(aPos + 1, bPos - aPos - 1);
-                var h = parseInt(r) - 1;
-                tmp = $('#form-control1').val().substr(0, aPos) + " " + getNow(h) + ":00";
-            }
-            $('#form-control1').val(tmp);
-            window.time = tmp;
-            setTimeout(function() {
-                Refresh(window.time, amplitudeOrAngle);
-            }, 100)
-        })
-
-        $("#down_hour").click(function() {
-
-            var tmp;
-
-            if ($('#form-control1').val() == "") {
-                var myDate = new Date();
-                var year = myDate.getFullYear(); //获取当前年
-                var month = myDate.getMonth() + 1; //获取当前月
-                var date = myDate.getDate(); //获取当前日
-                var h = myDate.getHours() + 1; //获取当前小时数(0-23)
-                tmp = year + '-' + getNow(month) + "-" + getNow(date) + " " + getNow(h) + ":00";
-            } else {
-                var str = $('#form-control1').val();
-                var aPos = str.indexOf(' ');
-                var bPos = str.indexOf(':');
-                var r = str.substr(aPos + 1, bPos - aPos - 1);
-                var h = parseInt(r) + 1;
-                tmp = $('#form-control1').val().substr(0, aPos) + " " + getNow(h) + ":00";
-            }
-            $('#form-control1').val(tmp);
-            window.time = tmp;
-            setTimeout(function() {
-                Refresh(window.time, amplitudeOrAngle);
-            }, 100)
-        })
     })
 </script>
 

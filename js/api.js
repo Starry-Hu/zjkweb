@@ -429,7 +429,7 @@ function fillXB_2(id, array, time) {
 
 
     // 绘制图层状态颜色
-    $("#flag" + id).css({ "background-color": temp[0][2] });
+    $("#flag" + id).css({ "background-color": temp[0][2], "opacity": 0.9 });
 }
 
 // 点击具体的表格信息内容，显示相应的图像
@@ -440,6 +440,15 @@ $("#tableInfo").on('click', '.XBdetail', function() {
     window.open('./detail.html?id=' + num + "&category=XB&time=" + time);
 })
 
+// 点击图层，跳转到相应的树形界面中
+$('.flag').click(function() {
+    var num = $(this).attr("order");
+    var time = $(this).attr("time");
+    if (num == 11) {
+        num = 200;
+    }
+    window.open("./tree.html?id=" + num + "&category=XB&time=" + time);
+})
 
 // 获取设备名，并显示在表格上
 function getNameTitle(id) {

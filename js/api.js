@@ -58,7 +58,6 @@ function getTableInfo(id, time) {
         type: "post",
         data: { DeviceID: id, datatime: time },
         success: function(res) {
-            console.log(getArray(res))
             fillTable(id, getArray(res), time);
         },
     });
@@ -111,7 +110,7 @@ function getDeviceColor(id, time) {
         type: "post",
         data: { DeviceID: id, datatime: time },
         success: function(res) {
-            $("#flag" + id).css({ "background-color": temp[0][2], opacity: 0.9 });
+            $("#flag" + id).css({ "background-color": getArray(res)[0], opacity: 0.9 });
         },
     });
 
@@ -127,8 +126,7 @@ $("#tableInfo").on('click', '.XBdetail', function() {
 // 点击图层，跳转到相应的树形界面中
 $('.flag').click(function() {
     var num = $(this).attr("order");
-    var time = $(this).attr("time");
-    window.open("./tree.html?id=" + num + "&time=" + time);
+    window.open("./tree.html?id=" + num + "&time=" + window.time);
 })
 
 // 获取设备名，并显示在表格上

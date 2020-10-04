@@ -3,22 +3,66 @@
 
 <head>
     <meta charset="utf-8">
-    <title>具体树图</title>
-    <link rel="stylesheet" type="text/css" href="../css/tree.css">
+    <title>风机组具体拓扑图</title>
     <link rel="stylesheet" href="../css/bootstrap.css">
     <link href="../css/bootstrap-datetimepicker.min.css" rel="stylesheet" media="screen">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+        }
+        
+        html,
+        body {
+            height: 100%;
+        }
+        
+        #content {
+            height: 93%;
+            width: 100%;
+            margin: 0 auto;
+            position: relative;
+            top: -5%;
+            margin-bottom: 2%;
+        }
+    </style>
 </head>
 
 <body>
-    <div id="container" style="width:1000px;height:900px;margin:0 auto"></div>
+    <div class="picker">
+        <form action="" class="form-horizontal" role="form" style="width: 600px;margin-left: 200px;">
+            <div class="form-group">
+                <div class="input-group date form_datetime col-md-5" data-date="2018-09-01T05:25:07Z" data-date-format="dd MM yyyy - HH:ii p" data-link-field="dtp_input1">
+                    <input class="form-control" size="16" type="text" value="" readonly placeholder="请手动选择日期">
+                    <span class="input-group-addon"><span class="glyphicon glyphicon-remove"></span></span>
+                    <span class="input-group-addon"><span class="glyphicon glyphicon-th"></span></span>
+                </div>
+                <input type="hidden" id="dtp_input1" value="" /><br />
+            </div>
+        </form>
+    </div>
+    <div id="content"></div>
 
 </body>
 <script type="text/javascript" src="../js/jquery.js"></script>
 <script type="text/javascript" src="../js/url.js"></script>
-<script type="text/javascript" src="../js/api.js"></script>
 <script type="text/javascript" src="../js/echarts.js"></script>
 <script type="text/javascript" src="../js/tree.js"></script>
+<script type="text/javascript" src="../js/bootstrap-datetimepicker.js"></script>
 
+<script type="text/javascript">
+    $('.form_datetime').datetimepicker({
+        language: 'en',
+        weekStart: 1,
+        todayBtn: 1,
+        autoclose: 1,
+        todayHighlight: 1,
+        startView: 2,
+        forceParse: 0,
+        showMeridian: 1,
+        format: 'yyyy-mm-dd hh:ii',
+    });
+</script>
 
 
 </html>

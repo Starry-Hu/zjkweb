@@ -143,8 +143,10 @@ function Refresh(time) {
 
     var number = ["一", "二", "三", "四", "五", "六", "七", "八", "九"];
 
+    // 获取表格内容，同时填充图层颜色
     for (var i = 0; i < 8; i++) {
         getTableInfo(i, time);
+        getDeviceColor(i, time);
     }
 }
 
@@ -375,81 +377,78 @@ $(function() {
     });
 });
 
-// 绘制电流历史曲线
+// 绘制电流历史曲线（缺最新接口）
 function drawI_history(time, id) {
     $.ajax({
         url: "http://47.92.26.201:8082/webservice.asmx" + "/getCurrentById",
         type: "post",
         data: {
-            // "datatime":time,
-            "id": id
+            "id": id,
+            // "datatime": time,
         },
         success: function(res) {
-            var loss = res.getElementsByTagName("string")[0].innerHTML.split(";")[0].split(",");
-            var temp = res.getElementsByTagName("string")[0].innerHTML.split(";")[1].split(",");
+            var loss = res
+                .getElementsByTagName("string")[0]
+                .innerHTML.split(";")[0]
+                .split(",");
+            var temp = res
+                .getElementsByTagName("string")[0]
+                .innerHTML.split(";")[1]
+                .split(",");
             var date = [];
             for (var i = 0; i < temp.length; i++) {
-                var x = temp[i].toString().replace(" ", "-")
+                var x = temp[i].toString().replace(" ", "-");
                 date.push(x);
             }
 
-
             try {
                 myChart.clear();
-            } catch (e) {
-
-            }
-            var myChart = echarts.init(document.getElementById('line_loss_pic'));
+            } catch (e) {}
+            var myChart = echarts.init(document.getElementById("line_loss_pic"));
 
             option = {
                 title: {
-                    text: id + '号电缆段电流历史信息',
-                    x: 'center'
-
+                    text: id + "号电缆段电流历史信息",
+                    x: "center",
                 },
                 tooltip: {
-                    trigger: 'axis'
+                    trigger: "axis",
                 },
 
                 toolbox: {
                     show: true,
                     feature: {
                         dataZoom: {
-                            yAxisIndex: 'none'
+                            yAxisIndex: "none",
                         },
                         dataView: { readOnly: false },
-                        magicType: { type: ['line', 'bar'] },
-
-
-                    }
+                        magicType: { type: ["line", "bar"] },
+                    },
                 },
                 xAxis: {
-                    type: 'category',
+                    type: "category",
                     boundaryGap: false,
-                    data: date
+                    data: date,
                 },
                 yAxis: {
-                    type: 'value',
+                    type: "value",
                     axisLabel: {
-                        formatter: '{value} A'
-                    }
+                        formatter: "{value} A",
+                    },
                 },
                 series: [{
-                    name: '当前电流',
-                    type: 'line',
+                    name: "当前电流",
+                    type: "line",
                     data: loss,
-                    itemStyle: { normal: { color: '#26C0C0' } },
+                    itemStyle: { normal: { color: "#26C0C0" } },
                     markLine: {
-                        data: [
-                            { type: 'average', name: '平均值' }
-                        ]
-                    }
-                }]
+                        data: [{ type: "average", name: "平均值" }],
+                    },
+                }, ],
             };
             myChart.setOption(option);
-        }
-
-    })
+        },
+    });
 }
 
 

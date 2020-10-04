@@ -1,9 +1,9 @@
-var title;
-var myDate = new Date();
 // var	time = myDate.getFullYear() + "-" + (myDate.getMonth()+1) + "-" + myDate.getDate() + " " + myDate.getHours() + ":" + myDate.getMinutes() + ":" + myDate.getSeconds();
 var pageUrl = window.location.search;
 var id = pageUrl.split("&")[0].split("=")[1];
-var time = pageUrl.split("&")[2].split("=")[1].replace("%20", " ");
+var time = pageUrl.split("&")[1].split("=")[1].replace("%20", " ");
+var title = id + "号设备";
+var myDate = new Date();
 
 if (time.indexOf(".") == -1) {
     time = time.split(":")[0] + ":00:00";
@@ -21,7 +21,7 @@ function getDatas(id, time) {
             var temp2 = [];
             var data = [];
             var x = [];
-            if (id == 7 || id == 9) {
+            if (id == 1 || id == 3 || id == 7) {
                 for (var i = 0; i < 4; i++) {
                     data.push(getArray(res)[i].split(","));
                     temp1.push(Math.max.apply(null, data[i]));
@@ -253,8 +253,10 @@ function createChart2(
     };
     myChart2.setOption(option);
 }
+
+
 $(function() {
-    if (id == 7 || id == 9) {
+    if (id == 1 || id == 3 || id == 7) {
         $(".content").html('<div id="current1" class="current">');
         getDatas(id, time);
         $(".form_datetime")

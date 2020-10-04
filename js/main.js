@@ -8,7 +8,6 @@ var FZ = [101, 102, 103, 203, 204, 205, 305, 306, 3013, 406, 407, 408, 508, 509,
 
 window.chartCount = 0;
 window.timeout = false; //启动及关闭按钮 
-window.amplitudeOrAngle = true;
 window.myArray = [0, 0, 0, 0, 0];
 
 // 手动、自动按钮切换函数
@@ -31,7 +30,7 @@ $(function() {
                         window.time = $("#form-control1").val();
                         if (window.time != "") {
                             setTimeout(function() {
-                                Refresh(window.time, amplitudeOrAngle);
+                                Refresh(window.time);
                             }, 100);
                         }
                     });
@@ -51,7 +50,7 @@ $(function() {
                         $(".minuteChoose").removeClass("active");
                         $(this).addClass("active");
                         setTimeout(function() {
-                            Refresh(window.time, amplitudeOrAngle);
+                            Refresh(window.time);
                         }, 100);
                     }
                 });
@@ -91,7 +90,7 @@ $(function() {
         $("#form-control1").val(tmp);
         window.time = tmp;
         setTimeout(function() {
-            Refresh(window.time, amplitudeOrAngle);
+            Refresh(window.time);
         }, 100);
     });
 
@@ -120,47 +119,33 @@ $(function() {
         $("#form-control1").val(tmp);
         window.time = tmp;
         setTimeout(function() {
-            Refresh(window.time, amplitudeOrAngle);
+            Refresh(window.time);
         }, 100);
     });
 });
 
 function interval() {
     if (timeout) return;
-    Refresh(window.time, amplitudeOrAngle);
+    Refresh(window.time);
     setTimeout(interval, 40000); //time是指本身,延时递归调用自己,100为间隔调用时间,单位毫秒 
 }
 
 
 // 入口函数在这里
 $(document).ready(function() {
-    Refresh(window.time, amplitudeOrAngle);
+    Refresh(window.time);
     setTimeout(interval, 40000);
 
 });
 
-function Refresh(time, amplitudeOrAngle) {
-    // $("#tableInfo table").remove();
-
+function Refresh(time) {
     //....................................................分支箱表格绘制...............................................................
 
     var number = ["一", "二", "三", "四", "五", "六", "七", "八", "九"];
 
     for (var i = 0; i < 8; i++) {
-        getXB_2(i, time);
+        getTableInfo(i, time);
     }
-
-    // 显示相应的图层颜色
-    // 点击线路显示其电流值（转到树状图中显示）
-    //   $(".box").click(function () {
-    //     if (count >= 12) {
-    //       $("#mymodal").modal("toggle");
-    //     } else {
-    //       count = count + 4;
-    //       var order = $(this).attr("order");
-    //       getXB_2(order, time);
-    //     }
-    //   });
 }
 
 // 绑定点击查看异常报警，并提供搜索方法
@@ -383,9 +368,8 @@ function errorV(x1, x2, x3, time, div) {
 
 
 $(function() {
-    // 删掉了介损角信息的图表\钠图表
-    // 点击I 显示电流的历史情况
-    $("#content").on("click", ".I_history", function() {
+    // 点击I显示对应的电流（或者是电阻）历史情况
+    $(".I_history").click(function() {
         $("#line_loss_chart").modal("toggle");
         drawI_history(window.time, $(this).attr("order"));
     });
@@ -393,23 +377,20 @@ $(function() {
 
 // 绘制电流历史曲线
 function drawI_history(time, id) {
-
     $.ajax({
-        url: url + "/getCurrentById",
+        url: "http://47.92.26.201:8082/webservice.asmx" + "/getCurrentById",
         type: "post",
         data: {
             // "datatime":time,
             "id": id
         },
         success: function(res) {
-
             var loss = res.getElementsByTagName("string")[0].innerHTML.split(";")[0].split(",");
             var temp = res.getElementsByTagName("string")[0].innerHTML.split(";")[1].split(",");
             var date = [];
             for (var i = 0; i < temp.length; i++) {
                 var x = temp[i].toString().replace(" ", "-")
                 date.push(x);
-
             }
 
 
@@ -590,7 +571,7 @@ function getAlarm(data, time) {
                 var ErrorTime = $(this).children().eq(4)[0].innerHTML;
                 window.timeout = true;
                 // 获取该异常对应情况下的数据信息，并进行显示
-                Refresh(ErrorTime, amplitudeOrAngle);
+                Refresh(ErrorTime);
 
                 $("#warningList_2").modal("toggle");
             });

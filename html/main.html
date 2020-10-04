@@ -72,7 +72,7 @@
         <!-- 异常报警按钮 -->
         <button class="btn btn-lg btn-danger" id="alarm">异常报警</button>
 
-        <!--  在底图上设置动态的覆盖图层进行显示 -->
+        <!-- 在底图上设置动态的覆盖图层进行显示 -->
         <!-- 变电站的状态图层 -->
         <div class="flag" order="0" id="flag0"></div>
         <div class="flag" order="1" id="flag1"></div>
@@ -86,26 +86,10 @@
         <div class="flag" order="9" id="flag9"></div>
         <div class="flag" order="10" id="flag10"></div>
 
-        <!-- 升压站浮层 -->
-
-        <!-- 线路状态图层 -->
-        <!-- <div class="box box_v" order="2" id="box1_2"></div>
-            <div class="box box_h" order="3" id="box1_3"></div>
-            <div class="box box_h" order="4" id="box2_3"></div>
-            <div class="box box_v" order="5" id="box2_4"></div>
-            <div class="box box_h" order="7" id="box3_5"></div>
-            <div class="box box_h" order="9" id="box3_13"></div>
-            <div class="box box_h" order="10" id="box4_6"></div>
-            <div class="box box_v" order="11" id="box4_7"></div>
-            <div class="box box_h" order="13" id="box5_8"></div>
-            <div class="box box_v" order="14" id="box5_9"></div>
-            <div class="box box_h" order="19" id="box7_13"></div>
-            <div class="box box_v" order="20" id="box7_14"></div>
-            <div class="box box_h" order="23" id="box8_15"></div>
-            <div class="box box_v" order="24" id="box8_16"></div> -->
-
-        <!-- 删除了“介” “钠”的显示，只保留电流的显示 -->
-        <!-- <div class="I_history" id="I_history2" order="2">I</div>
+        <!-- 电流、电阻的显示曲线 -->
+        <div class="I_history" id="I_history0" order="0">I</div>
+        <div class="I_history" id="I_history1" order="1">I</div>
+        <div class="I_history" id="I_history2" order="2">I</div>
         <div class="I_history" id="I_history3" order="3">I</div>
         <div class="I_history" id="I_history4" order="4">I</div>
         <div class="I_history" id="I_history5" order="5">I</div>
@@ -113,11 +97,9 @@
         <div class="I_history" id="I_history7" order="7">I</div>
         <div class="I_history" id="I_history8" order="8">I</div>
         <div class="I_history" id="I_history9" order="9">I</div>
-        <div class="I_history" id="I_history13" order="13">I</div>
-        <div class="I_history" id="I_history14" order="14">I</div>
-        <div class="I_history" id="I_history15" order="15">I</div>
-        <div class="I_history" id="I_history16" order="16">I</div> -->
+        <div class="I_history" id="I_history10" order="10">I</div>
 
+        <!-- 各变电站的表格信息 -->
         <div id="tableInfo"> </div>
     </div>
 
@@ -336,21 +318,6 @@
     $("#datetime1").attr("data-date", now);
     $("#datetime2").attr("data-date", now);
     $("#form-control_2").attr("data-date", year + '-' + getNow(month) + "-" + getNow(date));
-
-    function clearcontent() {
-        count = 0;
-        $("#compare").html("");
-        $("#compare").html("<div style=\"width: 90%;margin: 0 auto;\">" +
-            "<button class=\"btn btn-lg btn-primary\" id=\"clear\" onclick=\"clearcontent()\">清空</button>" +
-            "<button  class=\"btn btn-lg btn-danger\" id=\"off\" onclick=\"disappear()\">关闭</button>" + "</div>");
-    }
-
-    function disappear() {
-        $("#compare").animate({
-            right: "-400px"
-        });
-    }
-
     $('.form_datetime').datetimepicker({
         language: 'en',
         weekStart: 1,

@@ -93,6 +93,7 @@
         line-height: 24px;
         display: inline-block;
     }
+    /* 其他两个大功能按钮 */
     
     #alarm {
         position: absolute;
@@ -273,94 +274,6 @@
         top: 760px;
         left: 149px;
     }
-    /*  */
-    
-    .box {
-        position: absolute;
-        z-index: 2;
-        cursor: pointer;
-    }
-    
-    .box_h {
-        width: 50px;
-        height: 10px;
-    }
-    
-    .box_v {
-        width: 10px;
-        height: 50px;
-    }
-    /*分支箱电缆段分布*/
-    
-    #box1_2 {
-        left: 1658px;
-        top: 531px;
-    }
-    
-    #box1_3 {
-        left: 1588px;
-        top: 492px;
-    }
-    
-    #box2_3 {
-        left: 1444px;
-        top: 492px;
-    }
-    
-    #box2_4 {
-        left: 1414px;
-        top: 531px;
-    }
-    
-    #box3_5 {
-        left: 1193px;
-        top: 492px;
-    }
-    
-    #box3_13 {
-        left: 1092px;
-        top: 492px;
-    }
-    
-    #box4_6 {
-        left: 897px;
-        top: 426px;
-    }
-    
-    #box4_7 {
-        left: 867px;
-        top: 348px;
-    }
-    
-    #box5_8 {
-        left: 665px;
-        top: 426px;
-    }
-    
-    #box5_9 {
-        left: 635px;
-        top: 347px;
-    }
-    
-    #box7_13 {
-        left: 909px;
-        top: 650px;
-    }
-    
-    #box7_14 {
-        left: 877px;
-        top: 760px;
-    }
-    
-    #box8_15 {
-        left: 240px;
-        top: 632px;
-    }
-    
-    #box8_16 {
-        left: 209px;
-        top: 671px;
-    }
     /* 电流的历史信息点击按钮 */
     
     .I_history {
@@ -376,62 +289,57 @@
         z-index: 99999;
     }
     
+    #I_history0 {
+        left: 1720px;
+        top: 585px;
+    }
+    
+    #I_history1 {
+        left: 1550px;
+        top: 585px;
+    }
+    
     #I_history2 {
-        left: 1624px;
-        top: 609px;
+        left: 1380px;
+        top: 585px;
     }
     
     #I_history3 {
-        left: 1504px;
-        top: 452px;
+        left: 1200px;
+        top: 585px;
     }
     
     #I_history4 {
-        left: 1380px;
-        top: 611px;
+        left: 1045px;
+        top: 585px;
     }
     
     #I_history5 {
-        left: 1261px;
-        top: 453px;
+        left: 890px;
+        top: 585px;
     }
     
     #I_history6 {
-        left: 898px;
-        top: 439px;
+        left: 525px;
+        top: 585px;
     }
     
     #I_history7 {
-        left: 886px;
-        top: 308px;
+        left: 410px;
+        top: 860px;
     }
     
     #I_history8 {
-        left: 717px;
-        top: 394px;
+        left: 300px;
+        top: 585px;
     }
     
     #I_history9 {
-        left: 625px;
-        top: 289px;
+        left: 190px;
+        top: 860px;
     }
     
-    #I_history13 {
-        left: 930px;
-        top: 515px;
-    }
-    
-    #I_history14 {
-        left: 843px;
-        top: 779px;
-    }
-    
-    #I_history15 {
-        left: 508px;
-        top: 594px;
-    }
-    
-    #I_history16 {
-        left: 170px;
-        top: 748px;
+    #I_history10 {
+        left: 655px;
+        top: 180px;
     }

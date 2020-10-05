@@ -266,7 +266,7 @@ $(function() {
                 if (time != "") {
                     setTimeout(function() {
                         myChart1.clear();
-                        getDatas(id, category, time);
+                        getDatas(id, time);
                     }, 100);
                 }
             });
@@ -280,7 +280,7 @@ $(function() {
                 if (time != "") {
                     setTimeout(function() {
                         myChart2.clear();
-                        getDatas(id, category, time);
+                        getDatas(id, time);
                     }, 100);
                 }
             });

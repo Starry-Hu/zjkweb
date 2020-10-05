@@ -2,50 +2,63 @@ var pageUrl = window.location.search;
 var id = pageUrl.split("&")[0].split("=")[1];
 var time = pageUrl.split("&")[1].split("=")[1].replace("%20", " ");
 var title = id + "#风机组拓扑图";
-var myDate = new Date();
+// var myDate = new Date();
+// window.time = myDate.getFullYear() + "-" + (myDate.getMonth() + 1) + "-" + myDate.getDate() + " " + myDate.getHours() + ":" + myDate.getMinutes() + ":" + myDate.getSeconds();
 
-// 准备树的数据
-// var data = [
-//     { name: "广东", value: "01", parent: "-", color: "blue", status: "1" },
-//     { name: "广州", value: "0101", parent: "01", color: "red", status: "2" },
-//     { name: "潮州", value: "0102", parent: "01", color: "red", status: "2" },
-//     { name: "深圳", value: "0103", parent: "01", color: "red", status: "3" },
-//     { name: "茂名", value: "0104", parent: "01", color: "red", status: "1" },
-//     { name: "揭阳", value: "0105", parent: "01", color: "red", status: "1" },
-//     { name: "萝岗", value: "010101", parent: "0101", color: "green", status: "2" },
-//     { name: "天河", value: "010102", parent: "0101", color: "green", status: "2" },
-//     { name: "黄埔", value: "010103", parent: "0101", color: "green", status: "1" },
-//     { name: "白云", value: "010104", parent: "0101", color: "green", status: "1" },
-//     { name: "花都", value: "010105", parent: "0101", color: "green", status: "1" },
-//     { name: "海珠", value: "010106", parent: "0101", color: "green", status: "1" },
-//     { name: "枫溪", value: "010201", parent: "0102", color: "green", status: "1" },
-//     { name: "枫桥", value: "010202", parent: "0102", color: "blue", status: "1" },
-//     { name: "罗湖", value: "010301", parent: "0103", color: "blue", status: "1" },
-// ];
+if (time.indexOf(".") == -1) {
+    time = time.split(":")[0] + ":00:00";
+}
 
+// 相关的样式颜色
+var redColor = {
+    color: "#ff6347", // 节点填充的颜色
+    lineStyle: {
+        color: "#ff6347",
+    },
+    borderColor: "#ff6347",
+};
+var greenColor = {
+    color: "green", // 节点填充的颜色
+    lineStyle: {
+        color: "green",
+    },
+    borderColor: "green",
+};
 
 var data = [];
 
-window.onload = function() {
-    // 获取数据(json格式)，并处理成层级的形式
+$(function() {
+    getDatas(id, time);
+    $(".form_datetime")
+        .datetimepicker()
+        .on("changeDate", function(ev) {
+            time = $(".form-control").val();
+            if (time != "") {
+                setTimeout(function() {
+                    myChart.clear();
+                    getDatas(id, time);
+                }, 10);
+            }
+        });
+});
+
+// 获取数据(json格式)， 并处理成层级的形式
+function getDatas(id, time) {
     $.ajax({
         url: url + "/getTreeByName",
-        type: "get",
-        async: true,
+        type: "post",
         data: {
-            "treeName": "T" + id,
-            "datatime": time
+            treeName: "T" + id,
+            datatime: time,
         },
         success: function(res) {
             data[0] = createNode(res);
-            console.log(data);
-
             // 画树
             drawTree(data);
         },
         error: function(data) {
             alert("数据访问异常,请联系管理员！");
-        }
+        },
     });
 }
 
@@ -57,23 +70,34 @@ function createNode(res) {
     element["value"] = res.node.Length2ParentNode;
     element["LineType"] = res.node.LineType;
     element["ExceptionStr"] = res.node.ExceptionStr;
-    element["dataTime"] = res.node.dataTime;
+    element["dataTime"] = res.node.dataTime
+        .replace(/\+/, " ")
+        .replace("08:00", "");
     element["JNode"] = res.node.JNode;
     element["ShowInFigure"] = res.node.ShowInFigure;
+    element["label"] = {};
     element["children"] = [];
 
+    // 调整节点样式
+    if (res.node.color == "red") {
+        element.itemStyle = redColor;
+    } else if (res.node.color == "green") {
+        element.itemStyle = greenColor;
+    }
+
+    // 设置孩子节点数组
     for (let i = 0; i < res.SubTrees.length; i++) {
         const child = res.SubTrees[i];
         element["children"][i] = createNode(child);
     }
     return element;
-};
+}
 
-// 3. 画树
+// 画树
 function drawTree(data) {
     var myChart = echarts.init(document.getElementById("content"));
     myChart.showLoading();
-    myChart.hideLoading();
+    // 对样式预处理
     // for (let index = 0; index < data.length; index++) {
     //     const element = data[index];
     //     // element.label = { color: element.color }; （文字颜色）
@@ -84,26 +108,32 @@ function drawTree(data) {
     //         child(element.children);
     //     }
     // }
-    // data[2].label = { color: "red", fontSize: "20" }; //这个很重要，调试了好久才出来的，这个就是Echarts单个节点的样式改造了
+    myChart.hideLoading();
 
+    // data.children[0].label = { color: "red", fontSize: "20" }; //这个很重要，调试了好久才出来的，这个就是Echarts单个节点的样式改造了
 
     myChart.setOption({
-        // backgroundColor: "#06182F",
         title: {
-            text: "T" + id + "号风机组",
-            textStyle: {
-                fontSize: 20,
-                color: "#2AA0E5",
-            },
+            text: title + " 三相电压波形图",
+            subtext: "数据所在时间:" + time,
+            x: "center",
+            align: "right",
         },
         tooltip: {
             trigger: "item",
             triggerOn: "mousemove",
+            formatter: function(element) {
+                var s1 = "节点：" + element.name + "<br />距离父节点：" + element.value;
+                if (element.data.ExceptionStr != null) {
+                    s1 += "<br /> 错误信息：" + element.data.ExceptionStr;
+                }
+                return s1;
+            },
         },
         series: [{
             type: "tree",
             data: data,
-            symbol: "emptyCircle",
+            symbol: "circle",
             symbolSize: [12, 12],
             // borderColor: "black",
 
@@ -111,38 +141,9 @@ function drawTree(data) {
             label: {
                 normal: {
                     position: "top",
-                    distance: 10,
+                    distance: 5,
                     verticalAlign: "middle",
-                    align: "right",
-                    formatter: function(element) {
-                        var s1 = "{a|节点：" + element.name + "\n距离父节点：" + element.value + "}";
-                        if (element.ExceptionStr != null) {
-                            s1 += "{b|错误信息：" + element.ExceptionStr + "}";
-                        }
-                        return s1;
-                    },
-                    // [
-                    //     `{a|节点：' + name \n 距离父节点：value m}`,
-                    //     `{b|错误信息}`
-                    // ].join('\n'),
-
-                    rich: {
-                        a: {
-                            fontSize: 14,
-                            // textBorderColor: "#000",
-                            // textBorderWidth: 3,
-                            // color: "#fff",
-                        },
-                        b: {
-                            backgroundColor: "#992233",
-                            padding: 5,
-                            color: "#fff",
-                            shadowBlur: 5,
-                            shadowColor: "#336699",
-                            shadowOffsetX: 6,
-                            shadowOffsetY: 6,
-                        },
-                    },
+                    align: "center",
                 },
             },
             // 设置节点的相关样式
@@ -184,56 +185,17 @@ function drawTree(data) {
     });
 }
 
-
 //节点的点击事件
 function clickNode(name, value) {
     // alert(name + "--的值：" + value);
 }
 
-
-function child(param) { //递归循环节点
+function child(param) {
+    //递归循环节点
     $.each(param, function(i, obj) {
         changeColor(obj); //根据状态设置不同的颜色
         if (obj.children != null && obj.children.length != 0) {
             child(obj.children); //递归循环
         }
-    })
-
-};
-
-function changeColor(obj) { //设置节点颜色
-
-    // var dangerColor = {
-    //     color: "#ff6347", // 节点填充的颜色
-    //     lineStyle: {
-    //         color: "#ff6347",
-    //     },
-    //     borderColor: "#ff6347",
-    // };
-    // var warningColor = {
-    //     color: "#ffd700", // 节点填充的颜色
-    //     lineStyle: {
-    //         color: "#ffd700",
-    //     },
-    //     borderColor: "#ffd700",
-    // };
-
-    if (obj.color == "red") {
-        obj.itemStyle = {
-            color: "#ff6347", // 节点填充的颜色
-            lineStyle: {
-                color: "#ff6347",
-            },
-            borderColor: "#ff6347",
-        };
-    }
-    if (obj.status == 3) {
-        obj.itemStyle = {
-            color: "#ffd700", // 节点填充的颜色
-            lineStyle: {
-                color: "#ffd700",
-            },
-            borderColor: "#ffd700",
-        };
-    }
-};
+    });
+}

@@ -104,50 +104,6 @@
     </div>
 
     <!-- 点击异常报警后的弹出框 -->
-    <div class="modal" id="warningList" tabindex="-1">
-        <div class="modal-dialog" style="width:800px">
-            <div class="modal-content">
-                <div class="modal-header">
-                    <button type="button" class="close" data-dismiss="modal"><span
-                            aria-hidden="true">&times;</span><span class="sr-only">Close</span></button>
-                    <h4 class="modal-title"></h4>
-                </div>
-                <div class="modal-body">
-                    <div id="list" style="height: 500px;width: 100%;overflow: auto;"></div>
-                </div>
-                <div class="modal-footer">
-                    <form role="form">
-                        <div class="form-group" style="width: 300px;float: left;margin-right:50px;">
-                            <input type="text" class="form-control" placeholder="请输入设备号" id="deviceNum">
-                        </div>
-
-                        <div class="container" style="width: 600px;float: left;" id="container2">
-                            <form action="" class="form-horizontal" role="form">
-
-                                <div class="form-group">
-                                    <div class="input-group date form_datetime col-md-5" data-date-format="dd MM yyyy - HH:ii" data-link-field="dtp_input_1" id="datetime2">
-                                        <input class="form-control" size="16" type="text" value="" readonly placeholder="请手动选择日期" id="form-control2">
-                                        <span class="input-group-addon"><span
-                                                class="glyphicon glyphicon-remove"></span></span>
-                                        <span class="input-group-addon"><span
-                                                class="glyphicon glyphicon-th"></span></span>
-                                    </div>
-                                    <input type="hidden" id="dtp_input_1" value="" /><br />
-                                </div>
-                            </form>
-                        </div>
-                    </form>
-                    <button type="button" class="btn btn-primary" id="search">按条件查询</button>
-                    <button type="button" class="btn btn-default" data-dismiss="modal">关闭</button>
-                </div>
-            </div>
-            <!-- /.modal-content -->
-        </div>
-        <!-- /.modal-dialog -->
-    </div>
-    <!-- /.modal -->
-
-    <!-- 点击异常报警后的弹出框2:显示相角的情况 -->
     <div class="modal" id="warningList_2" tabindex="-1">
         <div class="modal-dialog" style="width:1000px">
             <div class="modal-content">

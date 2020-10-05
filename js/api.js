@@ -5,52 +5,6 @@ var boxid = ["1_1", "1_2", "1_3", "2_3", "2_4", "2_5", "3_5", "3_6", "3_13", "4_
 var newBoxid = ["1_1", "1_2", "1_3", "2_3", "2_4", "2_5", "3_5", "3_6", "3_13", "4_6", "4_7", "4_8", "5_8", "5_9", "5_10", "6_10", "6_11", "6_12", "7_13", "7_14", "7_15", "8_15", "8_16", "8_17", "9_18", "9_19", "9_20"];
 var number = ["", "一", "二", "三", "四", "五", "六", "七", "八", "九"];
 
-// 对分支箱旁边线路上的电流数据进行获取，并填充表格
-function getElection(FZ_id, FZ_time) {
-    console.log(FZ[FZ_id - 1]);
-    $.ajax({
-        url: url + "/getDataByDevice_FZ_2",
-        type: "post",
-        data: { "DeviceID": FZ[FZ_id - 1], "datatime": FZ_time },
-        success: function(res) {
-            fillFZ_2(FZ_id, getArray(res), FZ_time);
-        }
-    })
-}
-
-function fillFZ_2(FZ_id, array, time) {
-    var temp = [];
-    for (var i = 0; i < 6; i++)
-        temp.push(array[i].split(","));
-    for (var i = 0; i < 6; i++) {
-        for (var j = 0; j < 2; j++) {
-            if (temp[i][j] == "0" || temp[i][j] == "0.0")
-                temp[i][j] = "——";
-        }
-    }
-
-    var order = FZ[FZ_id - 1].toString().substr(0, 1);
-    var nameTitle = getNameTitle(FZ_id);
-    // 拼接右侧弹窗的内容进行显示
-    // 修改为：找到该设备对应的表格，将数据渲染成当前的
-    $("#tableInfo").html($("#tableInfo").html() +
-        "<table class=\"table table-bordered table-striped table-hover XBdetail detail \" id=\"table_info" + id + "\"  time=\"" + time + "\"  order=\"" + id + "\"><thead><tr>" +
-        "<th width=\"px\">&nbsp;&nbsp;&nbsp;#" + id + "</th>" +
-        "<th>模值(V)</th><th>角度(度)</th></tr></thead><tbody><tr><td>U<sub>A</sub></td>" +
-        "<td style='color:" + temp[0][2] + "'>" + temp[0][0] + "</td><td style='color:" + temp[0][2] + "'>" + temp[0][1] + "</td></tr><tr>" +
-        "<td>I<sub>B</sub></td>" +
-        "<td style='color:" + temp[1][2] + "'>" + temp[1][0] + "</td><td style='color:" + temp[1][2] + "'>" + temp[1][1] + "</td></tr><tr>" +
-        "<td>I<sub>C</sub></td>" +
-        "<td style='color:" + temp[2][2] + "'>" + temp[2][0] + "</td><td style='color:" + temp[2][2] + "'>" + temp[2][1] + "</td></tr><tr>" +
-        "<td>3I<sub>0</sub></td>" +
-        "<td style='color:" + temp[3][2] + "'>" + temp[3][0] + "</td><td style='color:" + temp[3][2] + "'>" + temp[3][1] + "</td></tr><tr>" +
-        "<td>I<sub>g1</sub></td>" +
-        "<td style='color:" + temp[4][2] + "'>" + temp[4][0] + "</td><td style='color:" + temp[4][2] + "'>" + temp[4][1] + "</td></tr><tr>" +
-        "<td>I<sub>g2</sub></td>" +
-        "<td style='color:" + temp[5][2] + "'>" + temp[5][0] + "</td><td style='color:" + temp[5][2] + "'>" + temp[5][1] + "</td></tr></tbody></table>"
-    );
-}
-
 // ---------------------  获取各风机组的“详细数据”并绘制表格 ------------------------
 function getTableInfo(id, time) {
     $.ajax({

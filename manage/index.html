@@ -12,18 +12,23 @@
 </head>
 
 <body class="layui-layout-body">
-    <div class="layui-tab layui-tab-card">
+    <div id="main" class="layui-tab layui-tab-card">
         <ul class="layui-tab-title">
-            <li lay-id="00" class="layui-this">用户管理</li>
-            <li lay-id="11">参数管理</li>
-            <li lay-id="22">线路管理</li>
+            <li class="layui-this" id="user_manage_tab">用户管理</li>
+            <li id="line_type_manage_tab">参数管理</li>
+            <li id="line_manage_tab">线路管理</li>
         </ul>
-        <div class="layui-tab-content">
-            <!-- 用户管理的内容 -->
-            <div class="layui-tab-item layui-show" id="user_manage">
-                <div class="box_content">
-                    <div> <button type="button" class="layui-btn" id="add_user">添加用户</button> </div>
-                    <table class="load_more user_table" border="1">
+
+        <div class="layui-tab-content" style="height: 1000px;">
+
+            <!-- 用户管理 -->
+            <div class="layui-tab-item layui-show">
+                <div class="layui-tab-item layui-show" id="user_manage">
+                    <button type="button" class="layui-btn" id="add_user">添加用户</button>
+                    <button class="layui-btn" id="refresh_user_manage">
+                        <i class="layui-icon layui-icon-refresh-3"></i>
+                    </button>
+                    <table class="layui-table user_table" border="1">
                         <thead>
                             <tr>
                                 <th>序号</th>
@@ -40,35 +45,477 @@
                     </table>
                     <div id="user_laypage" class="laypage"></div>
                 </div>
+
+                <!-- 添加用户表单 -->
+                <div id="add_user_box" class="adds layui-form">
+                    <form class="layui-form" action="">
+                        <br />
+                        <div class="layui-form-item">
+                            <div class="layui-inline">
+                                <label class="layui-form-label">用户名</label>
+                                <div class="layui-input-inline">
+                                    <input type="text" class="layui-input" lay-verify="required" id="user_UserName2">
+                                </div>
+                            </div>
+                        </div>
+                        <div class="layui-form-item">
+                            <div class="layui-inline">
+                                <label class="layui-form-label">真实姓名</label>
+                                <div class="layui-input-inline">
+                                    <input type="text" class="layui-input" lay-verify="required" id="user_Name2">
+                                </div>
+                            </div>
+                        </div>
+                        <div class="layui-form-item">
+                            <div class="layui-inline">
+                                <label class="layui-form-label">用户密码</label>
+                                <div class="layui-input-inline">
+                                    <input type="text" class="layui-input" lay-verify="required" id="user_Password2">
+                                </div>
+                            </div>
+                        </div>
+                        <div class="layui-form-item">
+                            <div class="layui-inline">
+                                <label class="layui-form-label">确认密码</label>
+                                <div class="layui-input-inline">
+                                    <input type="text" class="layui-input" lay-verify="required" id="user_ConfirmPassword2">
+                                </div>
+                            </div>
+                        </div>
+                        <div class="layui-form-item">
+                            <div class="layui-inline">
+                                <label class="layui-form-label">电话号码</label>
+                                <div class="layui-input-inline">
+                                    <input type="text" class="layui-input" lay-verify="phone|required" id="user_Phone2">
+                                </div>
+                            </div>
+                        </div>
+                        <div class="layui-form-item">
+                            <label class="layui-form-label">城市名称</label>
+                            <div class="layui-input-inline">
+                                <select lay-verify="required" id="user_CityName2">
+                                </select>
+                            </div>
+                        </div>
+                        <div class="layui-form-item">
+                            <label class="layui-form-label">权限</label>
+                            <div class="layui-input-inline">
+                                <select lay-verify="required" id="user_Permission2">
+                                    <option value="1">仅浏览</option>
+                                    <option value="2">一般用户</option>
+                                    <option value="3">系统管理员</option>
+                                </select>
+                            </div>
+                        </div>
+                        <div class="layui-form-item">
+                            <div class="layui-input-block">
+                                <button class="layui-btn submits" lay-submit lay-filter="add_user_submit">立即提交</button>
+                                <button type="reset" class="layui-btn layui-btn-primary">重置</button>
+                            </div>
+                        </div>
+                    </form>
+                </div>
+            </div>
+
+            <!-- 修改用户表单 -->
+            <div id="edit_user_box" class="adds">
+                <form class="layui-form" action="">
+                    <br />
+                    <div class="layui-form-item">
+                        <div class="layui-inline">
+                            <label class="layui-form-label">用户名</label>
+                            <div class="layui-input-inline">
+                                <input type="text" class="layui-input" lay-verify="required" id="user_UserName1" disabled="disabled">
+                            </div>
+                        </div>
+                    </div>
+                    <div class="layui-form-item">
+                        <div class="layui-inline">
+                            <label class="layui-form-label">真实姓名</label>
+                            <div class="layui-input-inline">
+                                <input type="text" class="layui-input" id="user_Name1">
+                            </div>
+                        </div>
+                    </div>
+                    <div class="layui-form-item">
+                        <div class="layui-inline">
+                            <label class="layui-form-label">电话号码</label>
+                            <div class="layui-input-inline">
+                                <input type="text" class="layui-input" lay-verify="phone|required" id="user_Phone1">
+                            </div>
+                        </div>
+                    </div>
+                    <div class="layui-form-item">
+                        <label class="layui-form-label">城市名称</label>
+                        <div class="layui-input-inline">
+                            <select lay-verify="required" id="user_CityName1"></select>
+                        </div>
+                    </div>
+
+                    <div class="layui-form-item">
+                        <label class="layui-form-label">权限</label>
+                        <div class="layui-input-inline">
+                            <select lay-verify="required" id="user_Permission1">
+                                <option value="1">仅浏览</option>
+                                <option value="2">一般用户</option>
+                                <option value="3">系统管理员</option>
+                            </select>
+                        </div>
+                    </div>
+                    <div class="layui-form-item">
+                        <div class="layui-input-block">
+                            <button class="layui-btn submits" lay-submit="" lay-filter="edit_user_submit">立即提交</button>
+                            <button type="reset" class="layui-btn layui-btn-primary">重置</button>
+                        </div>
+                    </div>
+                </form>
+            </div>
+
+            <!-- ----------------------------------- 参数管理 ------------------------------------- -->
+            <div class="layui-tab-item">
+                <div class="layui-tab-item layui-show" id="line_type_manage">
+                    <button type="button" class="layui-btn" id="add_line_type">添加参数</button>
+                    <button class="layui-btn" id="refresh_line_type_manage"> <i class="layui-icon layui-icon-refresh-3"></i></button>
+                    <table class="layui-table line_type_table" border="1">
+                        <thead>
+                            <tr>
+                                <th>序号</th>
+                                <th>类型</th>
+                                <th>电阻</th>
+                                <th>电抗</th>
+                                <th>电纳</th>
+                                <th>零序电阻</th>
+                                <th>零序电抗</th>
+                                <th>零序电纳</th>
+                                <th>修改</th>
+                                <th>删除</th>
+                            </tr>
+                        </thead>
+                        <tbody></tbody>
+                    </table>
+                    <div id="line_type_laypage" class="laypage"></div>
+                </div>
+
+                <!-- 添加参数 -->
+                <div id="add_line_type_box" class="adds layui-form">
+                    <form class="layui-form" action="">
+                        <br />
+                        <div class="layui-form-item">
+                            <div class="layui-inline">
+                                <label class="layui-form-label">线缆类型</label>
+                                <div class="layui-input-inline">
+                                    <input type="text" class="layui-input" lay-verify="required" id="LineType2">
+                                </div>
+                            </div>
+                        </div>
+                        <div class="layui-form-item">
+                            <div class="layui-inline">
+                                <label class="layui-form-label">电阻</label>
+                                <div class="layui-input-inline">
+                                    <input type="text" class="layui-input" lay-verify="required" id="rPerKm2">
+                                </div>
+                            </div>
+                        </div>
+                        <div class="layui-form-item">
+                            <div class="layui-inline">
+                                <label class="layui-form-label">电抗</label>
+                                <div class="layui-input-inline">
+                                    <input type="text" class="layui-input" lay-verify="required" id="xPerKm2">
+                                </div>
+                            </div>
+                        </div>
+                        <div class="layui-form-item">
+                            <div class="layui-inline">
+                                <label class="layui-form-label">电纳</label>
+                                <div class="layui-input-inline">
+                                    <input type="text" class="layui-input" lay-verify="required" id="wcPerkm2">
+                                </div>
+                            </div>
+                        </div>
+                        <div class="layui-form-item">
+                            <div class="layui-inline">
+                                <label class="layui-form-label">零序电阻</label>
+                                <div class="layui-input-inline">
+                                    <input type="text" class="layui-input" lay-verify="required" id="rPerKm02">
+                                </div>
+                            </div>
+                        </div>
+                        <div class="layui-form-item">
+                            <label class="layui-form-label">零序电抗</label>
+                            <div class="layui-input-inline">
+                                <input type="text" class="layui-input" lay-verify="required" id="xPerKm02">
+                            </div>
+                        </div>
+                        <div class="layui-form-item">
+                            <label class="layui-form-label">零序电纳</label>
+                            <div class="layui-input-inline">
+                                <input type="text" class="layui-input" lay-verify="required" id="wcPerkm02">
+                            </div>
+                        </div>
+                        <div class="layui-form-item">
+                            <div class="layui-input-block">
+                                <button class="layui-btn submits" lay-submit lay-filter="add_line_type_submit">立即提交</button>
+                                <button type="reset" class="layui-btn layui-btn-primary">重置</button>
+                            </div>
+                        </div>
+                    </form>
+                </div>
+
+                <!-- 修改参数 -->
+                <div id="edit_line_type_box" class="adds">
+                    <form class="layui-form" action="">
+                        <br />
+                        <div class="layui-form-item">
+                            <div class="layui-inline">
+                                <label class="layui-form-label">线缆类型</label>
+                                <div class="layui-input-inline">
+                                    <input type="text" class="layui-input" lay-verify="required" id="LineType1" disabled="disabled">
+                                </div>
+                            </div>
+                        </div>
+                        <div class="layui-form-item">
+                            <div class="layui-inline">
+                                <label class="layui-form-label">电阻</label>
+                                <div class="layui-input-inline">
+                                    <input type="text" class="layui-input" lay-verify="required" id="rPerKm1">
+                                </div>
+                            </div>
+                        </div>
+                        <div class="layui-form-item">
+                            <div class="layui-inline">
+                                <label class="layui-form-label">电抗</label>
+                                <div class="layui-input-inline">
+                                    <input type="text" class="layui-input" lay-verify="required" id="xPerKm1">
+                                </div>
+                            </div>
+                        </div>
+                        <div class="layui-form-item">
+                            <label class="layui-form-label">电纳</label>
+                            <div class="layui-input-inline">
+                                <input type="text" class="layui-input" lay-verify="required" id="wcPerkm1">
+                            </div>
+                        </div>
+                        <div class="layui-form-item">
+                            <div class="layui-inline">
+                                <label class="layui-form-label">零序电阻</label>
+                                <div class="layui-input-inline">
+                                    <input type="text" class="layui-input" id="rPerKm01">
+                                </div>
+                            </div>
+                        </div>
+                        <div class="layui-form-item">
+                            <div class="layui-inline">
+                                <label class="layui-form-label">零序电抗</label>
+                                <div class="layui-input-inline">
+                                    <input type="text" class="layui-input" lay-verify="required" id="xPerKm01">
+                                </div>
+                            </div>
+                        </div>
+                        <div class="layui-form-item">
+                            <label class="layui-form-label">零序电纳</label>
+                            <div class="layui-input-inline">
+                                <input type="text" class="layui-input" lay-verify="required" id="wcPerkm01">
+                            </div>
+                        </div>
+                        <div class="layui-form-item">
+                            <div class="layui-input-block">
+                                <button class="layui-btn submits" lay-submit="" lay-filter="edit_line_type_submit">立即提交</button>
+                                <button type="reset" class="layui-btn layui-btn-primary">重置</button>
+                            </div>
+                        </div>
+                    </form>
+                </div>
+            </div>
+
+            <!-- ----------------------------------- 线路管理 ------------------------------------- -->
+            <div class="layui-tab-item">
+                <div class="layui-tab-item layui-show" id="line_manage">
+                    <button type="button" class="layui-btn" id="add_line">添加线路</button>
+                    <button class="layui-btn" id="refresh_line_manage"> <i class="layui-icon layui-icon-refresh-3"></i></button>
+                    <table class="layui-table line_table" border="1">
+                        <thead>
+                            <tr>
+                                <th>序号</th>
+                                <th>线路名称</th>
+                                <th>节点名称</th>
+                                <th>父节点</th>
+                                <th>长度（米）</th>
+                                <th>图中显示</th>
+                                <th>线缆类型</th>
+                                <th>耐张节点</th>
+                                <th>修改</th>
+                                <th>删除</th>
+                            </tr>
+                        </thead>
+                        <tbody></tbody>
+                    </table>
+                    <div id="line_laypage" class="laypage"></div>
+                </div>
+
+                <!-- 添加线路 -->
+                <div id="add_line_box" class="adds layui-form">
+                    <form class="layui-form" action="">
+                        <br />
+                        <div class="layui-form-item">
+                            <div class="layui-inline">
+                                <label class="layui-form-label">线路名称</label>
+                                <div class="layui-input-inline">
+                                    <input type="text" class="layui-input" lay-verify="required" id="TreeName2">
+                                </div>
+                            </div>
+                        </div>
+                        <div class="layui-form-item">
+                            <div class="layui-inline">
+                                <label class="layui-form-label">节点名称</label>
+                                <div class="layui-input-inline">
+                                    <input type="text" class="layui-input" lay-verify="required" id="NodeName2">
+                                </div>
+                            </div>
+                        </div>
+                        <div class="layui-form-item">
+                            <label class="layui-form-label">父节点</label>
+                            <div class="layui-input-inline">
+                                <select lay-verify="required" id="ParentNodeName2"></select>
+                            </div>
+                        </div>
+                        <div class="layui-form-item">
+                            <div class="layui-inline">
+                                <label class="layui-form-label">长度（米）</label>
+                                <div class="layui-input-inline">
+                                    <input type="text" class="layui-input" lay-verify="required" id="Length2ParentNode2">
+                                </div>
+                            </div>
+                        </div>
+                        <div class="layui-form-item">
+                            <label class="layui-form-label">图中显示</label>
+                            <div class="layui-input-inline">
+                                <select lay-verify="required" id="ShowInFigure2">
+                                <option value="true">是</option>
+                                <option value="false">否</option>
+                            </select>
+                            </div>
+                        </div>
+                        <div class="layui-form-item">
+                            <label class="layui-form-label">线缆类型</label>
+                            <div class="layui-input-inline">
+                                <select lay-verify="required" id="LineType_2"></select>
+                            </div>
+                        </div>
+                        <div class="layui-form-item">
+                            <label class="layui-form-label">耐张节点</label>
+                            <div class="layui-input-inline">
+                                <select lay-verify="required" id="JNode2">
+                                 <option value="true">是</option>
+                                 <option value="false">否</option>
+                             </select>
+                            </div>
+                        </div>
+                        <div class="layui-form-item">
+                            <div class="layui-input-block">
+                                <button class="layui-btn submits" lay-submit lay-filter="add_line_submit">立即提交</button>
+                                <button type="reset" class="layui-btn layui-btn-primary">重置</button>
+                            </div>
+                        </div>
+                    </form>
+                </div>
+
+                <!-- 修改参数 -->
+                <div id="edit_line_box" class="adds">
+                    <form class="layui-form" action="">
+                        <br />
+                        <div class="layui-form-item">
+                            <div class="layui-inline">
+                                <label class="layui-form-label">线路名称</label>
+                                <div class="layui-input-inline">
+                                    <input type="text" class="layui-input" lay-verify="required" id="TreeName1">
+                                </div>
+                            </div>
+                        </div>
+                        <div class="layui-form-item">
+                            <div class="layui-inline">
+                                <label class="layui-form-label">节点名称</label>
+                                <div class="layui-input-inline">
+                                    <input type="text" class="layui-input" lay-verify="required" id="NodeName1">
+                                </div>
+                            </div>
+                        </div>
+                        <div class="layui-form-item">
+                            <label class="layui-form-label">父节点</label>
+                            <div class="layui-input-inline">
+                                <select lay-verify="required" id="ParentNodeName1"></select>
+                            </div>
+                        </div>
+                        <div class="layui-form-item">
+                            <div class="layui-inline">
+                                <label class="layui-form-label">长度（米）</label>
+                                <div class="layui-input-inline">
+                                    <input type="text" class="layui-input" lay-verify="required" id="Length2ParentNode1">
+                                </div>
+                            </div>
+                        </div>
+                        <div class="layui-form-item">
+                            <label class="layui-form-label">图中显示</label>
+                            <div class="layui-input-inline">
+                                <select lay-verify="required" id="ShowInFigure1">
+                                <option value="true">是</option>
+                                <option value="false">否</option>
+                            </select>
+                            </div>
+                        </div>
+                        <div class="layui-form-item">
+                            <label class="layui-form-label">线缆类型</label>
+                            <div class="layui-input-inline">
+                                <select lay-verify="required" id="LineType_1"></select>
+                            </div>
+                        </div>
+                        <div class="layui-form-item">
+                            <label class="layui-form-label">耐张节点</label>
+                            <div class="layui-input-inline">
+                                <select lay-verify="required" id="JNode1">
+                                <option value="true">是</option>
+                                <option value="false">否</option>
+                            </select>
+                            </div>
+                        </div>
+                        <div class="layui-form-item">
+                            <div class="layui-input-block">
+                                <button class="layui-btn submits" lay-submit lay-filter="add_line_submit">立即提交</button>
+                                <button type="reset" class="layui-btn layui-btn-primary">重置</button>
+                            </div>
+                        </div>
+                    </form>
+                </div>
             </div>
         </div>
-        <div class="layui-tab-item">2</div>
-        <div class="layui-tab-item">3</div>
-    </div>
-    </div>
 
 
-    <script type="text/javascript" src="js/jquery.js"></script>
-    <script type="text/javascript" src="js/jquery.cookie.js"></script>
-    <script type="text/javascript" src="js/url.js"></script>
+        <script type="text/javascript" src="js/jquery.js"></script>
+        <script type="text/javascript" src="js/jquery.cookie.js"></script>
+        <script type="text/javascript" src="js/adjust.js"></script>
+        <script type="text/javascript" src="js/url.js"></script>
 
-    <script type="text/javascript" src="js/adjust.js"></script>
-    <script type="text/javascript" src="lib/layui/layui.js"></script>
-    <script>
-        // $(function() {
-        //     layui.use(['layer'], function() {
-        //         var layer = layui.layer;
+        <script type="text/javascript" src="lib/layui/layui.js"></script>
+        <script type="text/javascript" src="js/index.js"></script>
+        <script>
+            layui.use('element', function() {
+                var $ = layui.jquery,
+                    element = layui.element;
 
-        //         if (token == '') {
-        //             layer.msg('您还未登录！请先登录！！', {
-        //                 time: 1000
-        //             }, function() {
-        //                 window.location.href = 'login.html';
-        //             });
-        //         }
-        //     })
-        // })
-    </script>
+                //触发事件
+                var active = {
+                    tabChange: function() {
+                        //切换到指定Tab项
+                        element.tabChange('demo', '22'); //切换到：用户管理
+                    }
+                };
+
+                $('.site-demo-active').on('click', function() {
+                    var othis = $(this),
+                        type = othis.data('type');
+                    active[type] ? active[type].call(this, othis) : '';
+                });
+            });
+        </script>
 </body>
 
 </html>

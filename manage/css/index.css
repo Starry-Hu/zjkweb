@@ -23,19 +23,7 @@
 
 a {
     text-decoration: none;
-    color: #fff;
-}
-
-
-/*滚动条样式*/
-
-::-webkit-scrollbar {
-    width: 6px;
-    background-color: #181c32;
-}
-
-::-webkit-scrollbar-thumb {
-    background-color: #5a76cd;
+    color: #009688;
 }
 
 
@@ -52,6 +40,15 @@ a {
 }
 
 
+/* 内容板块 */
+
+.layui-tab-content {
+    padding: 20px;
+    max-width: 1600px;
+    margin: 0 auto;
+}
+
+
 /* 表格样式 */
 
 .load_more {
@@ -60,10 +57,27 @@ a {
     border: 1px solid #fff;
     font-size: 0.14rem;
     margin: 0 auto;
-    margin-top: 10px;
+    margin-top: 20px;
 }
 
 .load_more td,
 .load_more th {
-    font-size: 15px;
+    font-size: 16px;
+}
+
+.laypage {
+    float: right;
+    margin-right: 2.5%;
+}
+
+
+/* 弹出的表单 */
+
+.adds {
+    display: none;
+    padding: 20px;
+}
+
+.layui-layer-content {
+    height: auto;
 }

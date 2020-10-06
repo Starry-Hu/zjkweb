@@ -591,7 +591,7 @@ function line_manage(PersonCode) {
     });
 }
 
-// 添加参数按钮的事件绑定
+// 添加线路按钮的事件绑定
 $("#add_line").click(function() {
     layui.use("layer", function() {
         var layer = layui.layer;
@@ -603,7 +603,7 @@ $("#add_line").click(function() {
     });
 });
 
-// 参数表格的修改和删除按钮
+// 线路表格的修改和删除按钮
 $(".line_table").on("click", "tbody tr td button", function(e) {
     if ($(this).attr("prop") == "edit") {
         $("#TreeName1").val($(this).parents("tr").find("td").eq(1).text());
@@ -647,7 +647,7 @@ $(".line_table").on("click", "tbody tr td button", function(e) {
     }
 });
 
-// 添加参数界面的提交按钮点击事件
+// 添加线路界面的提交按钮点击事件
 layui.use("form", function() {
     var form = layui.form;
     form.render();
@@ -683,7 +683,7 @@ layui.use("form", function() {
     });
 });
 
-// 编辑参数界面的提交按钮点击事件
+// 编辑线路界面的提交按钮点击事件
 layui.use("form", function() {
     var form = layui.form;
     form.render();

@@ -159,6 +159,11 @@ $(function() {
     $("#search_2").click(function() {
         getAlarm($("#deviceIDs").val(), $("#dtp_input_2").val());
     })
+
+    // 跳转后台管理系统的入口
+    $("#manageEntrance").click(function() {
+        window.open("../../manage/login.html");
+    });
 })
 
 

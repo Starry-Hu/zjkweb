@@ -102,10 +102,10 @@
         z-index: 999;
     }
     
-    #getWarning {
+    #manageEntrance {
         position: absolute;
-        right: 35%;
-        top: 5%;
+        left: 22%;
+        top: 2%;
         z-index: 999;
     }
     
@@ -143,7 +143,7 @@
     /* 显示图层的样式，主要是设置背景图片 */
     
     .pic {
-        /* width: 1800px; */
+        width: 1800px;
         height: 900px;
         background-image: url(../img/pic.png);
         background-size: 100%;
@@ -164,42 +164,42 @@
     
     #table_info0 {
         top: 200px;
-        right: 135px;
+        right: 100px;
     }
     
     #table_info1 {
         top: 905px;
-        right: 265px;
+        right: 230px;
     }
     
     #table_info2 {
         top: 200px;
-        right: 450px;
+        right: 415px;
     }
     
     #table_info3 {
         top: 905px;
-        right: 595px;
+        right: 545px;
     }
     
     #table_info4 {
         top: 200px;
-        right: 760px;
+        right: 725px;
     }
     
     #table_info5 {
         top: 905px;
-        left: 775px;
+        left: 705px;
     }
     
     #table_info6 {
         top: 905px;
-        left: 400px;
+        left: 355px;
     }
     
     #table_info7 {
         top: 150px;
-        left: 340px;
+        left: 315px;
     }
     
     #table_info8 {
@@ -221,58 +221,58 @@
     }
     
     #flag0 {
-        top: 758px;
-        right: 189px;
+        top: 719px;
+        right: 178px;
     }
     
     #flag1 {
-        top: 759px;
-        right: 358px;
+        top: 719px;
+        right: 337px;
     }
     
     #flag2 {
-        top: 759px;
-        right: 527px;
+        top: 719px;
+        right: 497px;
     }
     
     #flag3 {
-        top: 758px;
-        right: 705px;
+        top: 719px;
+        right: 665px;
     }
     
     #flag4 {
-        top: 758px;
-        right: 860px;
+        top: 719px;
+        right: 812px;
     }
     
     #flag5 {
-        top: 758px;
-        left: 841px;
+        top: 719px;
+        left: 798px;
     }
     
     #flag6 {
-        top: 759px;
-        left: 482px;
+        top: 719px;
+        left: 454px;
     }
     
     #flag7 {
-        top: 286px;
-        left: 606px;
+        top: 271px;
+        left: 573px;
     }
     
     #flag8 {
-        top: 759px;
-        left: 370px;
+        top: 719px;
+        left: 351px;
     }
     
     #flag9 {
-        top: 760px;
-        left: 266px;
+        top: 719px;
+        left: 253px;
     }
     
     #flag10 {
-        top: 760px;
-        left: 149px;
+        top: 719px;
+        left: 142px;
     }
     /* 电流的历史信息点击按钮 */
     
@@ -290,56 +290,56 @@
     }
     
     #I_history0 {
-        left: 1720px;
-        top: 585px;
+        left: 1625px;
+        top: 545px;
     }
     
     #I_history1 {
-        left: 1550px;
-        top: 585px;
+        left: 1465px;
+        top: 545px;
     }
     
     #I_history2 {
-        left: 1380px;
-        top: 585px;
+        left: 1305px;
+        top: 545px;
     }
     
     #I_history3 {
-        left: 1200px;
-        top: 585px;
+        left: 1135px;
+        top: 545px;
     }
     
     #I_history4 {
-        left: 1045px;
-        top: 585px;
+        left: 990px;
+        top: 545px;
     }
     
     #I_history5 {
-        left: 890px;
-        top: 585px;
+        left: 840px;
+        top: 545px;
     }
     
     #I_history6 {
-        left: 525px;
-        top: 585px;
+        left: 500px;
+        top: 545px;
     }
     
     #I_history7 {
-        left: 410px;
-        top: 860px;
+        left: 615px;
+        top: 235px;
     }
     
     #I_history8 {
-        left: 300px;
-        top: 585px;
+        left: 395px;
+        top: 835px;
     }
     
     #I_history9 {
-        left: 190px;
-        top: 860px;
+        left: 291px;
+        top: 835px;
     }
     
     #I_history10 {
-        left: 655px;
-        top: 180px;
+        left: 115px;
+        top: 835px;
     }

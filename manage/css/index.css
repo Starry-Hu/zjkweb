@@ -40,6 +40,18 @@ a {
 }
 
 
+/* 标题 */
+
+#title {
+    position: absolute;
+    z-index: 99;
+    right: 2%;
+    font-size: 18px;
+    line-height: 50px;
+    min-width: 120px;
+}
+
+
 /* 内容板块 */
 
 .layui-tab-content {
@@ -68,6 +80,26 @@ a {
 .laypage {
     float: right;
     margin-right: 2.5%;
+}
+
+
+/* 线路管理模块的查询样式 */
+
+
+/* 标签宽度设置 */
+
+#search-line-manage {
+    position: absolute;
+    top: 0;
+    right: 0;
+}
+
+#search-line-manage .layui-form-label {
+    width: 100px;
+}
+
+#search-line-manage .layui-form-item {
+    display: inline-block;
 }
 
 

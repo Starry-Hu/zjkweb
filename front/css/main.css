@@ -242,37 +242,42 @@
         width: 45px;
         position: absolute;
         z-index: 2;
-        cursor: pointer;
     }
     
     #flag1 {
         top: 664px;
         right: 135px;
+        cursor: pointer;
     }
     
     #flag2 {
         top: 664px;
         right: 302px;
+        cursor: pointer;
     }
     
     #flag3 {
         top: 664px;
         right: 468px;
+        cursor: pointer;
     }
     
     #flag4 {
         top: 664px;
         right: 642px;
+        cursor: pointer;
     }
     
     #flag5 {
         top: 664px;
         right: 795px;
+        cursor: pointer;
     }
     
     #flag6 {
         top: 664px;
         left: 808px;
+        cursor: pointer;
     }
     
     #flag7 {

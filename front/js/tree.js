@@ -1,8 +1,11 @@
 var pageUrl = window.location.search;
 var id = pageUrl.split("&")[0].split("=")[1];
 var time = pageUrl.split("&")[1].split("=")[1].replace("%20", " ");
-var title = id + "#风机组拓扑图";
+var title = getNameTitle(id) + "风电机组拓扑图";
+$('title').html(title);
+
 // var myDate = new Date();
+// window.time = dateFormat("YYYY-mm-dd HH:MM", myDate);
 // window.time = myDate.getFullYear() + "-" + (myDate.getMonth() + 1) + "-" + myDate.getDate() + " " + myDate.getHours() + ":" + myDate.getMinutes() + ":" + myDate.getSeconds();
 
 if (time.indexOf(".") == -1) {
@@ -114,7 +117,7 @@ function drawTree(data) {
 
     myChart.setOption({
         title: {
-            text: title + " 三相电压波形图",
+            text: title,
             subtext: "数据所在时间:" + time,
             x: "center",
             align: "right",
@@ -123,9 +126,10 @@ function drawTree(data) {
             trigger: "item",
             triggerOn: "mousemove",
             formatter: function(element) {
-                var s1 = "节点：" + element.name + "<br />距离父节点：" + element.value;
+                var s1 =
+                    "杆塔编号：" + element.name + "<br />距离上游杆塔：" + element.value + "m";
                 if (element.data.ExceptionStr != null) {
-                    s1 += "<br /> 错误信息：" + element.data.ExceptionStr;
+                    s1 += "<br /> 故障位置：" + element.data.ExceptionStr;
                 }
                 return s1;
             },
@@ -198,4 +202,30 @@ function child(param) {
             child(obj.children); //递归循环
         }
     });
+}
+
+// 获取设备名，并显示在表格上
+function getNameTitle(id) {
+    if (id == 1)
+        return "4#";
+    if (id == 2)
+        return "5#";
+    if (id == 3)
+        return "6#";
+    if (id == 4)
+        return "7#";
+    if (id == 5)
+        return "8#";
+    if (id == 6)
+        return "9#";
+    if (id == 7)
+        return "PT";
+    if (id == 8)
+        return "3923";
+    if (id == 9)
+        return "3921";
+    if (id == 10)
+        return "3935";
+    if (id == 11)
+        return "接地电阻";
 }

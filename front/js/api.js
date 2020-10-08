@@ -93,6 +93,10 @@ $("#tableInfo").on('click', '.XBdetail', function() {
 // 点击图层，跳转到相应的树形界面中
 $('.flag').click(function() {
     var num = $(this).attr("order");
+    // 仅有风电机组才能查看拓扑图
+    if (num > 6) {
+        return;
+    }
     window.open("./tree.html?id=" + num + "&time=" + window.time);
 })
 

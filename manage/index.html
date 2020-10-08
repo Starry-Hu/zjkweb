@@ -13,6 +13,7 @@
 
 <body class="layui-layout-body">
     <div id="main" class="layui-tab layui-tab-card">
+        <div id="title">电力设备状态监测系统</div>
         <ul class="layui-tab-title">
             <li class="layui-this" id="user_manage_tab">用户管理</li>
             <li id="line_type_manage_tab">参数管理</li>
@@ -21,7 +22,7 @@
 
         <div class="layui-tab-content" style="height: 1000px;">
 
-            <!-- 用户管理 -->
+            <!-- ----------------------------------- 用户管理 ------------------------------------- -->
             <div class="layui-tab-item layui-show">
                 <div class="layui-tab-item layui-show" id="user_manage">
                     <button type="button" class="layui-btn" id="add_user">添加用户</button>
@@ -35,7 +36,6 @@
                                 <th>用户名</th>
                                 <th>真实姓名</th>
                                 <th>电话号码</th>
-                                <th>城市名称</th>
                                 <th>用户权限</th>
                                 <th>修改</th>
                                 <th>删除</th>
@@ -91,13 +91,6 @@
                             </div>
                         </div>
                         <div class="layui-form-item">
-                            <label class="layui-form-label">城市名称</label>
-                            <div class="layui-input-inline">
-                                <select lay-verify="required" id="user_CityName2">
-                                </select>
-                            </div>
-                        </div>
-                        <div class="layui-form-item">
                             <label class="layui-form-label">权限</label>
                             <div class="layui-input-inline">
                                 <select lay-verify="required" id="user_Permission2">
@@ -145,13 +138,6 @@
                             </div>
                         </div>
                     </div>
-                    <div class="layui-form-item">
-                        <label class="layui-form-label">城市名称</label>
-                        <div class="layui-input-inline">
-                            <select lay-verify="required" id="user_CityName1"></select>
-                        </div>
-                    </div>
-
                     <div class="layui-form-item">
                         <label class="layui-form-label">权限</label>
                         <div class="layui-input-inline">
@@ -329,9 +315,40 @@
 
             <!-- ----------------------------------- 线路管理 ------------------------------------- -->
             <div class="layui-tab-item">
-                <div class="layui-tab-item layui-show" id="line_manage">
+                <div class="layui-tab-item layui-show" id="line_manage" style="position: relative;">
                     <button type="button" class="layui-btn" id="add_line">添加线路</button>
                     <button class="layui-btn" id="refresh_line_manage"> <i class="layui-icon layui-icon-refresh-3"></i></button>
+                    <!-- 查询表单 -->
+                    <form id="search-line-manage" class="layui-form">
+                        <div class="layui-form-item">
+                            <label class="layui-form-label">线路名称</label>
+                            <div class="layui-input-inline">
+                                <select lay-verify="required" id="searchCondition1">
+                                    <option value="" selected="">全部</option>
+                                </select>
+                            </div>
+                        </div>
+
+                        <div class="layui-form-item">
+                            <label class="layui-form-label">图中是否显示</label>
+                            <div class="layui-input-inline">
+                                <select lay-verify="required" id="searchCondition2">
+                                    <option value="" selected="">全部</option>
+                                    <option value="1">是</option>
+                                    <option value="0">否</option>
+                                </select>
+                            </div>
+                        </div>
+                        <div class="layui-form-item">
+                            <label class="layui-form-label" style="width: 0px;"></label>
+                            <div class="layui-input-inline">
+                                <div class="layui-btn" data-type="reload" id="search">搜索</div>
+                            </div>
+                        </div>
+
+                    </form>
+
+                    <!-- 显示内容的表格 -->
                     <table class="layui-table line_table" border="1">
                         <thead>
                             <tr>
@@ -390,7 +407,7 @@
                             <label class="layui-form-label">图中显示</label>
                             <div class="layui-input-inline">
                                 <select lay-verify="required" id="ShowInFigure2">
-                                <option value="true">是</option>
+                                <option value="true" selected="">是</option>
                                 <option value="false">否</option>
                             </select>
                             </div>
@@ -405,7 +422,7 @@
                             <label class="layui-form-label">耐张节点</label>
                             <div class="layui-input-inline">
                                 <select lay-verify="required" id="JNode2">
-                                 <option value="true">是</option>
+                                 <option value="true" selected="">是</option>
                                  <option value="false">否</option>
                              </select>
                             </div>
@@ -442,7 +459,9 @@
                         <div class="layui-form-item">
                             <label class="layui-form-label">父节点</label>
                             <div class="layui-input-inline">
-                                <select lay-verify="required" id="ParentNodeName1"></select>
+                                <select lay-verify="required" id="ParentNodeName1">
+                                     <option value=null selected="">无</option>
+                                </select>
                             </div>
                         </div>
                         <div class="layui-form-item">
@@ -457,9 +476,9 @@
                             <label class="layui-form-label">图中显示</label>
                             <div class="layui-input-inline">
                                 <select lay-verify="required" id="ShowInFigure1">
-                                <option value="true">是</option>
-                                <option value="false">否</option>
-                            </select>
+                                    <option value="true">是</option>
+                                    <option value="false">否</option>
+                                </select>
                             </div>
                         </div>
                         <div class="layui-form-item">
@@ -472,9 +491,9 @@
                             <label class="layui-form-label">耐张节点</label>
                             <div class="layui-input-inline">
                                 <select lay-verify="required" id="JNode1">
-                                <option value="true">是</option>
-                                <option value="false">否</option>
-                            </select>
+                                    <option value="true">是</option>
+                                    <option value="false">否</option>
+                                </select>
                             </div>
                         </div>
                         <div class="layui-form-item">
@@ -500,20 +519,6 @@
             layui.use('element', function() {
                 var $ = layui.jquery,
                     element = layui.element;
-
-                //触发事件
-                var active = {
-                    tabChange: function() {
-                        //切换到指定Tab项
-                        element.tabChange('demo', '22'); //切换到：用户管理
-                    }
-                };
-
-                $('.site-demo-active').on('click', function() {
-                    var othis = $(this),
-                        type = othis.data('type');
-                    active[type] ? active[type].call(this, othis) : '';
-                });
             });
         </script>
 </body>

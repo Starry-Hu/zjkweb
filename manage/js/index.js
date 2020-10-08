@@ -20,8 +20,6 @@ $(function() {
     }
 
     user_manage(PersonCode);
-    // getCityList(PersonCode);
-    getLineTypeNames(PersonCode);
 })
 
 // 对导航栏绑定点击方法
@@ -40,34 +38,29 @@ $("#refresh_line_type_manage").click(function() {
 });
 
 $("#line_manage_tab").click(function() {
-    line_manage(PersonCode);
+    line_manage(PersonCode, "", "");
+    // 渲染下拉框
+    getLineNames(PersonCode);
+    getLineTypeNames(PersonCode);
+    getNodesByTree(PersonCode);
 });
 $("#refresh_line_manage").click(function() {
-    line_manage(PersonCode);
+    line_manage(PersonCode, "", "");
+    // 渲染下拉框
+    getLineNames(PersonCode);
+    getLineTypeNames(PersonCode);
+    getNodesByTree(PersonCode);
 });
+// 线路管理中查询按钮的事件绑定
+$('#search').click(function() {
+    var searchCondition1 = $("#searchCondition1").val();
+    var searchCondition2 = $("#searchCondition2").val();
+    line_manage(PersonCode, searchCondition1, searchCondition2);
+})
 
-// 下拉列表的渲染
-// 城市列表的获取接口（暂缺）
-function getCityList(PersonCode) {
-    $.ajax({
-        url: url + "user.asmx/CityList",
-        type: "post",
-        dataType: "json",
-        data: { PersonCode: PersonCode },
-        success: function(res) {
-            layui.use("form", function() {
-                var form = layui.form;
-                for (var i = 0; i < res.length; i++) {
-                    $("#user_CityName1").append("<option value=" + res[i].cityName + ">" + res[i].cityName + "</option>");
-                    $("#user_CityName2").append("<option value=" + res[i].cityName + ">" + res[i].cityName + "</option>");
-                }
-                form.render();
-            });
-        },
-    });
-}
 
-// 线缆类型列表的获取接口
+// 下拉列表的渲染显示（都是线路管理的）
+// 线缆类型的获取接口
 function getLineTypeNames(PersonCode) {
     $.ajax({
         url: url + "LineTypes.asmx/getLineTypeNames",
@@ -75,14 +68,11 @@ function getLineTypeNames(PersonCode) {
         dataType: "json",
         data: { PersonCode: PersonCode },
         success: function(res) {
+            $("#LineType_1").html("");
+            $("#LineType_2").html("");
+
             layui.use("form", function() {
                 var form = layui.form;
-                // $.each(res, function(index, item) {
-                //     $("#LineType1").append(new Option(item.LineType, item.LineType)); // 下拉菜单里添加元素
-                //     console.log($('#LineType1').html())
-                //     $("#LineType2").append(new Option(item.LineType, item.LineType)); // 下拉菜单里添加元素
-                // });
-                // layui.form.render("select");
                 for (var i = 0; i < res.length; i++) {
                     $("#LineType_1").append("<option value=" + res[i].LineType + ">" + res[i].LineType + "</option>");
                     $("#LineType_2").append("<option value=" + res[i].LineType + ">" + res[i].LineType + "</option>");
@@ -92,6 +82,54 @@ function getLineTypeNames(PersonCode) {
         },
     });
 }
+
+// 线路名称的获取接口
+function getLineNames(PersonCode) {
+    $.ajax({
+        url: url + "Line.asmx/Lines_List",
+        type: "post",
+        dataType: "json",
+        data: { PersonCode: PersonCode },
+        success: function(res) {
+            layui.use("form", function() {
+                $("#searchCondition1").html('<option value="" selected="">全部</option>');
+
+                var form = layui.form;
+                for (var i = 0; i < res.length; i++) {
+                    $("#searchCondition1").append("<option value=" + res[i].LineName + ">" + res[i].LineName + "</option>");
+                }
+                form.render();
+            });
+        },
+    });
+}
+
+// 获取某棵树的全部节点（下拉框渲染）
+function getNodesByTree(PersonCode, TreeName) {
+    $.ajax({
+        url: url + "Line.asmx/Nodes_List",
+        type: "post",
+        dataType: "json",
+        data: {
+            PersonCode: PersonCode,
+            TreeName: TreeName,
+        },
+        success: function(res) {
+            layui.use("form", function() {
+                $("#ParentNodeName1").html('<option value="null" selected="">无</option>');
+
+                var form = layui.form;
+                for (var i = 0; i < res.length; i++) {
+                    $("#ParentNodeName1").append("<option value=" + res[i].NodeName + ">" + res[i].NodeName + "</option>");
+                }
+                form.render();
+            });
+        },
+    });
+}
+
+
+// ------------------------------------------------------------------------
 
 // 提示框函数
 function tip(content) {
@@ -176,10 +214,6 @@ function user_manage(PersonCode) {
                                     "</td>" +
                                     "<td>" +
                                     res[obj.limit * (obj.curr - 1) + i]
-                                    .cityName +
-                                    "</td>" +
-                                    "<td>" +
-                                    res[obj.limit * (obj.curr - 1) + i]
                                     .userRole +
                                     "</td>" +
                                     "<td><button type='button' class='layui-btn layui-btn-sm layui-btn-normal' prop='edit'><i class='layui-icon'></i> 编辑</button>" +
@@ -213,8 +247,7 @@ $(".user_table").on("click", "tbody tr td button", function(e) {
         $("#user_UserName1").val($(this).parents("tr").find("td").eq(1).text());
         $("#user_Name1").val($(this).parents("tr").find("td").eq(2).text());
         $("#user_Phone1").val($(this).parents("tr").find("td").eq(3).text());
-        $("#user_CityName1").val($(this).parents("tr").find("td").eq(4).text());
-        var permission = $(this).parents("tr").find("td").eq(5).text();
+        var permission = $(this).parents("tr").find("td").eq(4).text();
         if (permission == "仅浏览") $("#user_Permission1").val("1");
         else if (permission == "一般用户") $("#user_Permission1").val("2");
         else $("#user_Permission1").val("3");
@@ -229,8 +262,7 @@ $(".user_table").on("click", "tbody tr td button", function(e) {
         });
     } else {
         editAndDelConfirm("删除", del_user);
-        var temp1 = $(this).parents("tr").find("td").eq(1).text();
-        var temp2 = $(this).parents("tr").find("td").eq(4).text();
+        var UserName = $(this).parents("tr").find("td").eq(1).text();
 
         function del_user() {
             $.ajax({
@@ -239,8 +271,8 @@ $(".user_table").on("click", "tbody tr td button", function(e) {
                 dataType: "json",
                 data: {
                     PersonCode: PersonCode,
-                    UserName: temp1,
-                    CityName: temp2,
+                    UserName: UserName,
+                    CityName: " ",
                 },
                 success: function(res) {
                     tip(res);
@@ -261,7 +293,6 @@ layui.use("form", function() {
         var password = $("#user_Password2").val();
         var confirm_password = $("#user_ConfirmPassword2").val();
         var phoneNumber = $("#user_Phone2").val();
-        var cityName = $("#user_CityName2").val();
         var userRole = $("#user_Permission2").val();
 
         // 检查两次密码是否相同
@@ -278,7 +309,7 @@ layui.use("form", function() {
                 realName: realName,
                 password: password,
                 phoneNumber: phoneNumber,
-                cityName: cityName,
+                cityName: " ",
                 userRole: userRole,
             },
             success: function(res) {
@@ -301,7 +332,6 @@ layui.use("form", function() {
             var userName = $("#user_UserName1").val();
             var realName = $("#user_Name1").val();
             var phoneNumber = $("#user_Phone1").val();
-            var cityName = $("#user_CityName1").val();
             var userRole = $("#user_Permission1").val();
             $.ajax({
                 url: url + "user.asmx/User_Management_Update",
@@ -312,7 +342,7 @@ layui.use("form", function() {
                     userName: userName,
                     realName: realName,
                     phoneNumber: phoneNumber,
-                    cityName: cityName,
+                    cityName: " ",
                     userRole: userRole,
                 },
                 success: function(res) {
@@ -526,9 +556,7 @@ function getTreeNames(params) {
     });
 }
 
-function line_manage(PersonCode) {
-    // 获取所有的线路名称列表
-
+function line_manage(PersonCode, searchCondition1, searchCondition2) {
     // 清空原有数据
     $(".wait_remove_lines").remove();
     // 用线路名称一个个去渲染表格，得到所有的信息
@@ -538,8 +566,8 @@ function line_manage(PersonCode) {
         dataType: "json",
         data: {
             PersonCode: PersonCode,
-            TreeName: "T1",
-            showInFigure: "1"
+            TreeName: searchCondition1,
+            showInFigure: searchCondition2,
         },
         success: function(res) {
             layui.use("laypage", function() {
@@ -552,31 +580,25 @@ function line_manage(PersonCode) {
                     jump: function(obj) {
                         $(".wait_remove_lines").remove();
                         for (var i = 0; i < obj.limit; i++) {
-                            if (res[obj.limit * (obj.curr - 1) + i]) {
-                                $(".line_table tbody").append(
-                                    '<tr class="wait_remove_lines">' +
-                                    "<td>" +
-                                    (i + 1) +
-                                    "</td>" +
-                                    "<td>" +
-                                    res[obj.limit * (obj.curr - 1) + i].TreeName +
-                                    "</td>" +
-                                    "<td>" +
-                                    res[obj.limit * (obj.curr - 1) + i].NodeName +
-                                    "</td>" +
-                                    "<td>" +
-                                    res[obj.limit * (obj.curr - 1) + i].ParentNodeName +
-                                    "</td>" +
-                                    "<td>" +
-                                    res[obj.limit * (obj.curr - 1) + i].Length2ParentNode +
-                                    "</td>" +
-                                    "<td>" +
-                                    res[obj.limit * (obj.curr - 1) + i].ShowInFigure +
-                                    "<td>" +
-                                    res[obj.limit * (obj.curr - 1) + i].LineType +
-                                    "</td>" +
-                                    "<td>" +
-                                    res[obj.limit * (obj.curr - 1) + i].JNode +
+                            const element = res[obj.limit * (obj.curr - 1) + i];
+                            if (element) {
+                                // 相应的信息处理
+                                if (element.ParentNodeName == null) {
+                                    element.ParentNodeName = "无";
+                                }
+                                if (element.ShowInFigure == false) {
+                                    element.ShowInFigure = "否";
+                                } else {
+                                    element.ShowInFigure = "是";
+                                }
+                                if (element.JNode == false) {
+                                    element.JNode = "否";
+                                } else {
+                                    element.JNode = "是";
+                                }
+
+                                $(".line_table tbody").append('<tr class="wait_remove_lines">' + "<td>" + (i + 1) + "</td>" + "<td>" + element.TreeName + "</td>" + "<td>" + element.NodeName + "</td>" + "<td>" + element.ParentNodeName +
+                                    "</td>" + "<td>" + element.Length2ParentNode + "</td>" + "<td>" + element.ShowInFigure + "<td>" + element.LineType + "</td>" + "<td>" + element.JNode +
                                     "</td>" +
                                     "<td><button type='button' class='layui-btn layui-btn-sm layui-btn-normal' prop='edit'><i class='layui-icon'></i> 编辑</button>" +
                                     "<td><button type='button' class='layui-btn layui-btn-sm layui-btn-danger' prop='delete'><i class='layui-icon'></i> 删除</button>" +
@@ -608,12 +630,31 @@ $(".line_table").on("click", "tbody tr td button", function(e) {
     if ($(this).attr("prop") == "edit") {
         $("#TreeName1").val($(this).parents("tr").find("td").eq(1).text());
         $("#NodeName1").val($(this).parents("tr").find("td").eq(2).text());
-        $("#ParentNodeName1").val($(this).parents("tr").find("td").eq(3).text());
+        $("#ParentNodeName1").val();
         $("#Length2ParentNode1").val($(this).parents("tr").find("td").eq(4).text());
         $("#ShowInFigure1").val($(this).parents("tr").find("td").eq(5).text());
         $("#LineType_1").val($(this).parents("tr").find("td").eq(6).text());
         $("#JNode1").val($(this).parents("tr").find("td").eq(7).text());
 
+        // 相应的信息处理
+        var ParentNodeName = $(this).parents("tr").find("td").eq(3).text();
+        if (permission == "无") $("#ParentNodeName1").val("null");
+        else $("#user_Permission1").val(ParentNodeName);
+
+
+        if ($("#ParentNodeName1").val() == "无") {
+            $("#ParentNodeName1").val(null);
+        }
+        if ($("#ShowInFigure1").val() == "否") {
+            $("#ShowInFigure1").val(false);
+        } else {
+            $("#ShowInFigure1").val(true);
+        }
+        if ($("#JNode1").val() == "否") {
+            $("#JNode1").val(false);
+        } else {
+            $("#JNode1").val(true);
+        }
         layui.use(["form", "layer"], function() {
             var layer = layui.layer;
             layui.form.render();
@@ -623,6 +664,8 @@ $(".line_table").on("click", "tbody tr td button", function(e) {
                 content: $("#edit_line_box"),
             });
         });
+
+        console.log()
     } else {
         editAndDelConfirm("删除", del_line);
         var temp1 = $(this).parents("tr").find("td").eq(1).text();

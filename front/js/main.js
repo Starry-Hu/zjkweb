@@ -1,7 +1,6 @@
 var count = 0;
 var myDate = new Date();
 window.time = dateFormat("YYYY-mm-dd HH:MM", myDate);
-// myDate.getFullYear() + "-" + (myDate.getMonth() + 1) + "-" + myDate.getDate() + " " + myDate.getHours() + ":" + myDate.getMinutes() + ":" + myDate.getSeconds();
 var map = ["一", "二", "三", "四", "五", "六", "七", "八", "九"];
 var orderNum = [1, 2, 3, 3, 4, 5, 5, 6, 13, 6, 7, 8, 8, 9, 10, 10, 11, 12, 13, 14, 15, 18];
 var specialNum = [1, 2, 3, 3, 4, 5, 5, 6, 13, 6, 7, 8, 8, 9, 10, 10, 11, 12, 13, 14, 15, 15, 16, 17, 18, 19, 20];

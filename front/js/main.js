@@ -1,6 +1,7 @@
 var count = 0;
 var myDate = new Date();
-window.time = myDate.getFullYear() + "-" + (myDate.getMonth() + 1) + "-" + myDate.getDate() + " " + myDate.getHours() + ":" + myDate.getMinutes() + ":" + myDate.getSeconds();;
+window.time = dateFormat("YYYY-mm-dd HH:MM", myDate);
+// myDate.getFullYear() + "-" + (myDate.getMonth() + 1) + "-" + myDate.getDate() + " " + myDate.getHours() + ":" + myDate.getMinutes() + ":" + myDate.getSeconds();
 var map = ["一", "二", "三", "四", "五", "六", "七", "八", "九"];
 var orderNum = [1, 2, 3, 3, 4, 5, 5, 6, 13, 6, 7, 8, 8, 9, 10, 10, 11, 12, 13, 14, 15, 18];
 var specialNum = [1, 2, 3, 3, 4, 5, 5, 6, 13, 6, 7, 8, 8, 9, 10, 10, 11, 12, 13, 14, 15, 15, 16, 17, 18, 19, 20];
@@ -60,7 +61,8 @@ $(function() {
                 $("#container1").css("display", "none");
 
                 window.timeout = false;
-                window.time = myDate.getFullYear() + "-" + (myDate.getMonth() + 1) + "-" + myDate.getDate() + " " + myDate.getHours() + ":" + myDate.getMinutes() + ":" + myDate.getSeconds();
+                window.time = dateFormat("YYYY-mm-dd HH:MM", myDate);
+                // window.time = myDate.getFullYear() + "-" + (myDate.getMonth() + 1) + "-" + myDate.getDate() + " " + myDate.getHours() + ":" + myDate.getMinutes() + ":" + myDate.getSeconds();
                 interval();
             }
         },
@@ -71,11 +73,8 @@ $(function() {
     $("#up_hour").click(function() {
         if ($("#form-control1").val() == "") {
             var myDate = new Date();
-            var year = myDate.getFullYear(); //获取当前年
-            var month = myDate.getMonth() + 1; //获取当前月
-            var date = myDate.getDate(); //获取当前日
-            var h = myDate.getHours() - 1; //获取当前小时数(0-23)
-            tmp = year + "-" + getNow(month) + "-" + getNow(date) + " " + getNow(h) + ":00";
+            var h = myDate.getHours() - 1; //获取前一个小时数(0-23)
+            tmp = dateFormat("YYYY-mm-dd HH", myDate) + ":00";
         } else {
             var str = $("#form-control1").val();
             var aPos = str.indexOf(" ");
@@ -99,9 +98,6 @@ $(function() {
 
         if ($("#form-control1").val() == "") {
             var myDate = new Date();
-            var year = myDate.getFullYear(); //获取当前年
-            var month = myDate.getMonth() + 1; //获取当前月
-            var date = myDate.getDate(); //获取当前日
             var h = myDate.getHours() + 1; //获取当前小时数(0-23)
             tmp = year + "-" + getNow(month) + "-" + getNow(date) + " " + getNow(h) + ":00";
 
@@ -135,16 +131,13 @@ function interval() {
 $(document).ready(function() {
     Refresh(window.time);
     setTimeout(interval, 40000);
-
 });
 
 function Refresh(time) {
-    //....................................................分支箱表格绘制...............................................................
-
-    var number = ["一", "二", "三", "四", "五", "六", "七", "八", "九"];
-
+    // 刷新设置快照时间
+    $("#shot-time").html(time.substr(0, 16));
     // 获取表格内容，同时填充图层颜色
-    for (var i = 0; i < 8; i++) {
+    for (var i = 1; i <= 11; i++) {
         getTableInfo(i, time);
         getDeviceColor(i, time);
     }
@@ -175,14 +168,14 @@ $(function() {
     });
 });
 
-// 绘制电流历史曲线（缺最新接口）
+// 绘制电流历史曲线
 function drawI_history(time, id) {
     $.ajax({
-        url: "http://47.92.26.201:8082/webservice.asmx" + "/getCurrentById",
+        url: url + "/getCurrentById",
         type: "post",
         data: {
             "id": id,
-            // "datatime": time,
+            "datatime": time,
         },
         success: function(res) {
             var loss = res
@@ -203,47 +196,132 @@ function drawI_history(time, id) {
                 myChart.clear();
             } catch (e) {}
             var myChart = echarts.init(document.getElementById("line_loss_pic"));
+            var option;
+            if (id == 7) {
+                option = {
+                    title: {
+                        text: getNameTitle(id) + "电缆段电压历史信息",
+                        x: "center",
+                    },
+                    tooltip: {
+                        trigger: "axis",
+                    },
 
-            option = {
-                title: {
-                    text: id + "号电缆段电流历史信息",
-                    x: "center",
-                },
-                tooltip: {
-                    trigger: "axis",
-                },
-
-                toolbox: {
-                    show: true,
-                    feature: {
-                        dataZoom: {
-                            yAxisIndex: "none",
+                    toolbox: {
+                        show: true,
+                        feature: {
+                            dataZoom: {
+                                yAxisIndex: "none",
+                            },
+                            dataView: { readOnly: false },
+                            magicType: { type: ["line", "bar"] },
                         },
-                        dataView: { readOnly: false },
-                        magicType: { type: ["line", "bar"] },
                     },
-                },
-                xAxis: {
-                    type: "category",
-                    boundaryGap: false,
-                    data: date,
-                },
-                yAxis: {
-                    type: "value",
-                    axisLabel: {
-                        formatter: "{value} A",
+                    xAxis: {
+                        type: "category",
+                        boundaryGap: false,
+                        data: date,
                     },
-                },
-                series: [{
-                    name: "当前电流",
-                    type: "line",
-                    data: loss,
-                    itemStyle: { normal: { color: "#26C0C0" } },
-                    markLine: {
-                        data: [{ type: "average", name: "平均值" }],
+                    yAxis: {
+                        type: "value",
+                        axisLabel: {
+                            formatter: "{value} V",
+                        },
                     },
-                }, ],
-            };
+                    series: [{
+                        name: "当前电压",
+                        type: "line",
+                        data: loss,
+                        itemStyle: { normal: { color: "#26C0C0" } },
+                        markLine: {
+                            data: [{ type: "average", name: "平均值" }],
+                        },
+                    }, ],
+                };
+            } else if (id == 11) {
+                option = {
+                    title: {
+                        text: getNameTitle(id) + "电缆段电阻历史信息",
+                        x: "center",
+                    },
+                    tooltip: {
+                        trigger: "axis",
+                    },
+
+                    toolbox: {
+                        show: true,
+                        feature: {
+                            dataZoom: {
+                                yAxisIndex: "none",
+                            },
+                            dataView: { readOnly: false },
+                            magicType: { type: ["line", "bar"] },
+                        },
+                    },
+                    xAxis: {
+                        type: "category",
+                        boundaryGap: false,
+                        data: date,
+                    },
+                    yAxis: {
+                        type: "value",
+                        axisLabel: {
+                            formatter: "{value} R",
+                        },
+                    },
+                    series: [{
+                        name: "当前电阻",
+                        type: "line",
+                        data: loss,
+                        itemStyle: { normal: { color: "#26C0C0" } },
+                        markLine: {
+                            data: [{ type: "average", name: "平均值" }],
+                        },
+                    }, ],
+                };
+            } else {
+                option = {
+                    title: {
+                        text: getNameTitle(id) + "风电机组电缆段电流历史信息",
+                        x: "center",
+                    },
+                    tooltip: {
+                        trigger: "axis",
+                    },
+
+                    toolbox: {
+                        show: true,
+                        feature: {
+                            dataZoom: {
+                                yAxisIndex: "none",
+                            },
+                            dataView: { readOnly: false },
+                            magicType: { type: ["line", "bar"] },
+                        },
+                    },
+                    xAxis: {
+                        type: "category",
+                        boundaryGap: false,
+                        data: date,
+                    },
+                    yAxis: {
+                        type: "value",
+                        axisLabel: {
+                            formatter: "{value} A",
+                        },
+                    },
+                    series: [{
+                        name: "当前电流",
+                        type: "line",
+                        data: loss,
+                        itemStyle: { normal: { color: "#26C0C0" } },
+                        markLine: {
+                            data: [{ type: "average", name: "平均值" }],
+                        },
+                    }, ],
+                };
+            }
+
             myChart.setOption(option);
         },
     });
@@ -263,22 +341,6 @@ function GetDeviceID(ID) {
     return result;
 
 }
-
-function backID(name) {
-
-    var ID = "";
-
-    for (var i = 0; i < 9; i++) {
-        if (map[i] == name[3]) {
-            ID = i + 1;
-            break;
-        }
-    }
-    if (name.length > 7) ID = ID + '0' + name[4] + name[5];
-    else ID = ID + '0' + name[4];
-    return ID;
-}
-
 //////////////////
 
 for (var i = 1; i < 5; i++) $("#show" + i).draggable();
@@ -338,7 +400,6 @@ function getAlarm(data, time) {
         type: "post",
         data: { "DeviceID": data, "datatime": time },
         success: function(res) {
-
             var count = 0;
             var content = "";
 
@@ -367,6 +428,7 @@ function getAlarm(data, time) {
             $("#list_2 table tbody tr").click(function(e) {
                 var ErrorTime = $(this).children().eq(4)[0].innerHTML;
                 window.timeout = true;
+                window.time = ErrorTime;
                 // 获取该异常对应情况下的数据信息，并进行显示
                 Refresh(ErrorTime);
 
@@ -427,4 +489,25 @@ function GetDeviceID_2(DeviceID) {
                 return "分支箱八16号线";
         }
     }
+}
+
+// 格式化时间
+function dateFormat(fmt, date) {
+    let ret;
+    const opt = {
+        "Y+": date.getFullYear().toString(), // 年
+        "m+": (date.getMonth() + 1).toString(), // 月
+        "d+": date.getDate().toString(), // 日
+        "H+": date.getHours().toString(), // 时
+        "M+": date.getMinutes().toString(), // 分
+        "S+": date.getSeconds().toString() // 秒
+            // 有其他格式化字符需求可以继续添加，必须转化成字符串
+    };
+    for (let k in opt) {
+        ret = new RegExp("(" + k + ")").exec(fmt);
+        if (ret) {
+            fmt = fmt.replace(ret[1], (ret[1].length == 1) ? (opt[k]) : (opt[k].padStart(ret[1].length, "0")))
+        };
+    };
+    return fmt;
 }

@@ -16,6 +16,10 @@
         font-weight: bold;
         text-align: center;
     }
+    
+    table th {
+        text-align: center;
+    }
     /* 解决boostrap点击弹窗后抖动现象 */
     
     .modal-open {
@@ -57,6 +61,16 @@
     #loading img {
         display: inline-block;
         width: 300px;
+    }
+    /* 快照时间样式 */
+    
+    #shot-time-container {
+        width: 500px;
+        position: absolute;
+        left: 21%;
+        top: 2%;
+        z-index: 99;
+        font-weight: bold;
     }
     /* 自动刷新or查找某时刻的信息的样式 */
     
@@ -104,7 +118,7 @@
     
     #manageEntrance {
         position: absolute;
-        left: 22%;
+        left: 0;
         top: 2%;
         z-index: 999;
     }
@@ -148,62 +162,73 @@
         background-image: url(../img/pic.png);
         background-size: 100%;
         position: relative;
+        top: -40px;
         /* left: -100px;
     top: -120px; */
         z-index: 1;
-        /* transform: scale(0.9, 0.9); */
+        transform: scale(0.9, 0.9);
         margin: 0 auto;
     }
     /* 表格的样式 */
     
     .XBdetail {
-        width: 235px;
+        width: 215px;
         position: absolute;
     }
     /* 为每个表格设置不同的显示位置 */
     
-    #table_info0 {
-        top: 200px;
-        right: 100px;
-    }
-    
     #table_info1 {
-        top: 905px;
-        right: 230px;
+        top: 230px;
+        right: 27px;
     }
     
     #table_info2 {
-        top: 200px;
-        right: 415px;
+        top: 762px;
+        right: 214px;
     }
     
     #table_info3 {
-        top: 905px;
-        right: 545px;
+        top: 230px;
+        right: 386px;
     }
     
     #table_info4 {
-        top: 200px;
-        right: 725px;
+        top: 762px;
+        right: 537px;
     }
     
     #table_info5 {
-        top: 905px;
-        left: 705px;
+        top: 230px;
+        right: 714px;
     }
     
     #table_info6 {
-        top: 905px;
-        left: 355px;
+        top: 762px;
+        left: 753px;
     }
     
     #table_info7 {
-        top: 150px;
-        left: 315px;
+        top: 760px;
+        left: 455px;
     }
     
     #table_info8 {
-        top: 150px;
+        top: 840px;
+        left: 205px;
+    }
+    
+    #table_info9 {
+        top: 840px;
+        left: -55px;
+    }
+    
+    #table_info10 {
+        top: 570px;
+        left: -110px;
+    }
+    
+    #table_info11 {
+        top: 168px;
         left: 340px;
     }
     
@@ -220,59 +245,59 @@
         cursor: pointer;
     }
     
-    #flag0 {
-        top: 719px;
-        right: 178px;
-    }
-    
     #flag1 {
-        top: 719px;
-        right: 337px;
+        top: 664px;
+        right: 135px;
     }
     
     #flag2 {
-        top: 719px;
-        right: 497px;
+        top: 664px;
+        right: 302px;
     }
     
     #flag3 {
-        top: 719px;
-        right: 665px;
+        top: 664px;
+        right: 468px;
     }
     
     #flag4 {
-        top: 719px;
-        right: 812px;
+        top: 664px;
+        right: 642px;
     }
     
     #flag5 {
-        top: 719px;
-        left: 798px;
+        top: 664px;
+        right: 795px;
     }
     
     #flag6 {
-        top: 719px;
-        left: 454px;
+        top: 664px;
+        left: 808px;
     }
     
     #flag7 {
-        top: 271px;
-        left: 573px;
+        top: 664px;
+        left: 454px;
     }
     
     #flag8 {
-        top: 719px;
-        left: 351px;
+        top: 665px;
+        left: 346px;
     }
     
     #flag9 {
-        top: 719px;
-        left: 253px;
+        top: 667px;
+        left: 244px;
     }
     
     #flag10 {
-        top: 719px;
-        left: 142px;
+        top: 666px;
+        left: 129px;
+    }
+    
+    #flag11 {
+        top: 288px;
+        left: 578px;
     }
     /* 电流的历史信息点击按钮 */
     
@@ -289,57 +314,57 @@
         z-index: 99999;
     }
     
-    #I_history0 {
-        left: 1625px;
-        top: 545px;
-    }
-    
     #I_history1 {
-        left: 1465px;
-        top: 545px;
+        left: 1655px;
+        top: 500px;
     }
     
     #I_history2 {
-        left: 1305px;
-        top: 545px;
+        left: 1488px;
+        top: 500px;
     }
     
     #I_history3 {
-        left: 1135px;
-        top: 545px;
+        left: 1325px;
+        top: 500px;
     }
     
     #I_history4 {
-        left: 990px;
-        top: 545px;
+        left: 1149px;
+        top: 500px;
     }
     
     #I_history5 {
-        left: 840px;
-        top: 545px;
+        left: 996px;
+        top: 500px;
     }
     
     #I_history6 {
-        left: 500px;
-        top: 545px;
+        left: 844px;
+        top: 500px;
     }
     
     #I_history7 {
-        left: 615px;
-        top: 235px;
+        left: 490px;
+        top: 610px;
     }
     
     #I_history8 {
-        left: 395px;
-        top: 835px;
+        left: 382px;
+        top: 768px;
     }
     
     #I_history9 {
-        left: 291px;
-        top: 835px;
+        left: 280px;
+        top: 768px;
     }
     
     #I_history10 {
-        left: 115px;
-        top: 835px;
+        left: 163px;
+        top: 768px;
+    }
+    
+    #I_history11 {
+        left: 622px;
+        top: 217px;
     }

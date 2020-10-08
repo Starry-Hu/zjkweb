@@ -17,7 +17,6 @@
     </div>
 
     <div class="pic" id="content">
-
         <!-- 自动刷新or查找某时刻的信息 -->
         <div id="switchContainer">
             <div class="switch">
@@ -71,12 +70,13 @@
 
         <!-- 异常报警按钮 -->
         <button class="btn btn-lg btn-danger" id="alarm">异常报警</button>
+        <!-- 当前的快照时间 -->
+        <h4 id="shot-time-container">快照时间：<span id="shot-time">2020-10-09 19:00</span></h4>
         <!-- 后台管理系统的入口 -->
         <button class="btn btn-lg btn-info" id="manageEntrance">管理系统入口</button>
 
         <!-- 在底图上设置动态的覆盖图层进行显示 -->
         <!-- 变电站的状态图层 -->
-        <div class="flag" order="0" id="flag0"></div>
         <div class="flag" order="1" id="flag1"></div>
         <div class="flag" order="2" id="flag2"></div>
         <div class="flag" order="3" id="flag3"></div>
@@ -87,22 +87,23 @@
         <div class="flag" order="8" id="flag8"></div>
         <div class="flag" order="9" id="flag9"></div>
         <div class="flag" order="10" id="flag10"></div>
+        <div class="flag" order="11" id="flag11"></div>
 
         <!-- 电流、电阻的显示曲线 -->
-        <div class="I_history" id="I_history0" order="0">I</div>
         <div class="I_history" id="I_history1" order="1">I</div>
         <div class="I_history" id="I_history2" order="2">I</div>
         <div class="I_history" id="I_history3" order="3">I</div>
         <div class="I_history" id="I_history4" order="4">I</div>
         <div class="I_history" id="I_history5" order="5">I</div>
         <div class="I_history" id="I_history6" order="6">I</div>
-        <div class="I_history" id="I_history7" order="7">I</div>
+        <div class="I_history" id="I_history7" order="7">U</div>
         <div class="I_history" id="I_history8" order="8">I</div>
         <div class="I_history" id="I_history9" order="9">I</div>
         <div class="I_history" id="I_history10" order="10">I</div>
+        <div class="I_history" id="I_history11" order="11">R</div>
 
         <!-- 各变电站的表格信息 -->
-        <div id="tableInfo"> </div>
+        <div id="tableInfo"></div>
     </div>
 
     <!-- 点击异常报警后的弹出框 -->

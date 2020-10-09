@@ -1,26 +1,31 @@
 // 绑定方法
 var PersonCode = window.localStorage.getItem("PersonCode");
-
 $(function() {
     if (PersonCode == undefined || PersonCode == "") {
         layui.use(["layer"], function() {
             var layer = layui.layer;
+            layer.msg(
+                "您还未登录！请先登录！！", {
+                    time: 1000,
+                },
+                function() {
+                    window.location.href = "login.html";
+                }
+            );
 
-            if (token == "") {
-                layer.msg(
-                    "您还未登录！请先登录！！", {
-                        time: 1000,
-                    },
-                    function() {
-                        window.location.href = "login.html";
-                    }
-                );
-            }
         });
     }
 
     user_manage(PersonCode);
 })
+
+// 退出登录的按钮事件
+$('#logout').click(function() {
+    window.localStorage.setItem("PersonCode", "");
+    window.location.href = "login.html";
+})
+
+
 
 // 对导航栏绑定点击方法
 $("#user_manage_tab").click(function() {
@@ -42,14 +47,12 @@ $("#line_manage_tab").click(function() {
     // 渲染下拉框
     getLineNames(PersonCode);
     getLineTypeNames(PersonCode);
-    getNodesByTree(PersonCode);
 });
 $("#refresh_line_manage").click(function() {
     line_manage(PersonCode, "", "");
     // 渲染下拉框
     getLineNames(PersonCode);
     getLineTypeNames(PersonCode);
-    getNodesByTree(PersonCode);
 });
 // 线路管理中查询按钮的事件绑定
 $('#search').click(function() {
@@ -57,7 +60,6 @@ $('#search').click(function() {
     var searchCondition2 = $("#searchCondition2").val();
     line_manage(PersonCode, searchCondition1, searchCondition2);
 })
-
 
 // 下拉列表的渲染显示（都是线路管理的）
 // 线缆类型的获取接口
@@ -104,8 +106,8 @@ function getLineNames(PersonCode) {
     });
 }
 
-// 获取某棵树的全部节点（下拉框渲染）
-function getNodesByTree(PersonCode, TreeName) {
+// 获取某线路的全部节点（下拉框渲染）
+function getNodesByTree(PersonCode, TreeName, ParentNodeName1) {
     $.ajax({
         url: url + "Line.asmx/Nodes_List",
         type: "post",
@@ -122,6 +124,10 @@ function getNodesByTree(PersonCode, TreeName) {
                 for (var i = 0; i < res.length; i++) {
                     $("#ParentNodeName1").append("<option value=" + res[i].NodeName + ">" + res[i].NodeName + "</option>");
                 }
+
+                if (ParentNodeName1 == "无") $("#ParentNodeName1").val("null");
+                else $("#ParentNodeName1").val(ParentNodeName1);
+
                 form.render();
             });
         },
@@ -547,19 +553,9 @@ layui.use("form", function() {
 });
 
 // ----------------------------  线路管理的列表  ------------------------------
-function getTreeNames(params) {
-    $.ajax({
-        url: url + "WebService.asmx/getTreeNames",
-        type: "post",
-        dataType: "json",
-        success: function(res) {},
-    });
-}
-
 function line_manage(PersonCode, searchCondition1, searchCondition2) {
     // 清空原有数据
     $(".wait_remove_lines").remove();
-    // 用线路名称一个个去渲染表格，得到所有的信息
     $.ajax({
         url: url + "Line.asmx/Line_Management_List",
         type: "post",
@@ -630,31 +626,23 @@ $(".line_table").on("click", "tbody tr td button", function(e) {
     if ($(this).attr("prop") == "edit") {
         $("#TreeName1").val($(this).parents("tr").find("td").eq(1).text());
         $("#NodeName1").val($(this).parents("tr").find("td").eq(2).text());
-        $("#ParentNodeName1").val();
+        var ParentNodeName1 = $(this).parents("tr").find("td").eq(3).text();
         $("#Length2ParentNode1").val($(this).parents("tr").find("td").eq(4).text());
-        $("#ShowInFigure1").val($(this).parents("tr").find("td").eq(5).text());
+        var ShowInFigure1 = $(this).parents("tr").find("td").eq(5).text();
         $("#LineType_1").val($(this).parents("tr").find("td").eq(6).text());
-        $("#JNode1").val($(this).parents("tr").find("td").eq(7).text());
+        var JNode1 = $(this).parents("tr").find("td").eq(7).text();
 
         // 相应的信息处理
-        var ParentNodeName = $(this).parents("tr").find("td").eq(3).text();
-        if (permission == "无") $("#ParentNodeName1").val("null");
-        else $("#user_Permission1").val(ParentNodeName);
+        getNodesByTree(PersonCode, $("#TreeName1").val(), ParentNodeName1);
+        if (ShowInFigure1 == "是") $("#ShowInFigure1").val("true");
+        else $("#ShowInFigure1").val("false");
 
 
-        if ($("#ParentNodeName1").val() == "无") {
-            $("#ParentNodeName1").val(null);
-        }
-        if ($("#ShowInFigure1").val() == "否") {
-            $("#ShowInFigure1").val(false);
-        } else {
-            $("#ShowInFigure1").val(true);
-        }
-        if ($("#JNode1").val() == "否") {
-            $("#JNode1").val(false);
-        } else {
-            $("#JNode1").val(true);
-        }
+        if (JNode1 == "是") $("#JNode1").val("true");
+        else $("#JNode1").val("false");
+
+
+
         layui.use(["form", "layer"], function() {
             var layer = layui.layer;
             layui.form.render();

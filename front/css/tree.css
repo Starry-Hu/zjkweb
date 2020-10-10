@@ -10,24 +10,9 @@ body {
 
 .content {
     height: 93%;
-    width: 98%;
+    /* width: 100%; */
+    min-width: 1980px;
     margin: 0 auto;
     position: relative;
     top: -5%;
-}
-
-#current1 {
-    height: 49%;
-    width: 100%;
-}
-
-#current2 {
-    margin-top: 2%;
-    height: 49%;
-    width: 100%;
-}
-
-#current3 {
-    height: 60%;
-    width: 100%;
 }

@@ -9,8 +9,11 @@ $('title').html(title);
 // window.time = myDate.getFullYear() + "-" + (myDate.getMonth() + 1) + "-" + myDate.getDate() + " " + myDate.getHours() + ":" + myDate.getMinutes() + ":" + myDate.getSeconds();
 
 if (time.indexOf(".") == -1) {
-    time = time.split(":")[0] + ":00:00";
+    var temp = time.split(":");
+    time = temp[0] + ":" + temp[1] + ":00";
 }
+
+var myChart = echarts.init(document.getElementById("content"));
 
 // 相关的样式颜色
 var redColor = {
@@ -47,6 +50,15 @@ $(function() {
 
 // 获取数据(json格式)， 并处理成层级的形式
 function getDatas(id, time) {
+
+    myChart.showLoading({
+        text: "加载中……",
+        color: "#01AAED",
+        textColor: "#000",
+        maskColor: "rgba(255, 255, 255, 0.8)",
+        zlevel: 0,
+    });
+
     $.ajax({
         url: url + "/getTreeByName",
         type: "post",
@@ -55,7 +67,7 @@ function getDatas(id, time) {
             datatime: time,
         },
         success: function(res) {
-            data[0] = createNode(res);
+            data[0] = createNode(res, true);
             // 画树
             drawTree(data);
         },
@@ -66,7 +78,7 @@ function getDatas(id, time) {
 }
 
 // 生成节点的方法（递归将孩子节点填充到数组中）同时将数据处理成层级的形式
-function createNode(res) {
+function createNode(res, top) {
     var element = {};
     element["TreeName"] = res.node.TreeName;
     element["name"] = res.node.NodeName;
@@ -81,25 +93,39 @@ function createNode(res) {
     element["label"] = {};
     element["children"] = [];
 
-    // 调整节点样式
+    // 调整节点颜色
     if (res.node.color == "red") {
         element.itemStyle = redColor;
     } else if (res.node.color == "green") {
         element.itemStyle = greenColor;
     }
-
+    // 调整节点大小
+    if (res.node.JNode == 0) {
+        element.symbolSize = [8, 8];
+    }
+    // 调整节点名称
+    var index = res.node.NodeName.indexOf("_");
+    if (index != -1) {
+        element["name"] = res.node.NodeName.substr(0, index);
+    }
+    // 调整节点的标签位置
+    if (!top) {
+        element.label.position = "bottom";
+        element.label.distance = 10;
+        top = true;
+    } else {
+        top = false;
+    }
     // 设置孩子节点数组
     for (let i = 0; i < res.SubTrees.length; i++) {
         const child = res.SubTrees[i];
-        element["children"][i] = createNode(child);
+        element["children"][i] = createNode(child, top);
     }
     return element;
 }
 
 // 画树
 function drawTree(data) {
-    var myChart = echarts.init(document.getElementById("content"));
-    myChart.showLoading();
     // 对样式预处理
     // for (let index = 0; index < data.length; index++) {
     //     const element = data[index];
@@ -126,8 +152,7 @@ function drawTree(data) {
             trigger: "item",
             triggerOn: "mousemove",
             formatter: function(element) {
-                var s1 =
-                    "杆塔编号：" + element.name + "<br />距离上游杆塔：" + element.value + "m";
+                var s1 = "杆塔编号：" + element.name + "<br />距离上游杆塔：" + element.value + "m";
                 if (element.data.ExceptionStr != null) {
                     s1 += "<br /> 故障位置：" + element.data.ExceptionStr;
                 }
@@ -145,7 +170,7 @@ function drawTree(data) {
             label: {
                 normal: {
                     position: "top",
-                    distance: 5,
+                    distance: 10,
                     verticalAlign: "middle",
                     align: "center",
                 },

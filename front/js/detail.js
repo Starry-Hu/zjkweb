@@ -131,7 +131,6 @@ function createChart(div, array1, array2, array3, array4, maxdata, mindata, x) {
             ],
         };
     } else if (id == 11) {
-        console.log(1111);
         option = {
             title: {
                 text: title + " 三相电阻波形图",

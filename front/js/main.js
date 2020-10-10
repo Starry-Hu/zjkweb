@@ -23,17 +23,15 @@ $(function() {
 
                 $("#container1").css("display", "block");
                 // 选择时间
-                $("#datetime1")
-                    .datetimepicker()
-                    .on("changeDate", function(ev) {
-                        // 获取选择的时间，并以当前时间去刷新界面；同时提供六个分钟时间段的选择按钮
-                        window.time = $("#form-control1").val();
-                        if (window.time != "") {
-                            setTimeout(function() {
-                                Refresh(window.time);
-                            }, 100);
-                        }
-                    });
+                $("#datetime1").datetimepicker().on("changeDate", function(ev) {
+                    // 获取选择的时间，并以当前时间去刷新界面；同时提供六个分钟时间段的选择按钮
+                    window.time = $("#form-control1").val();
+                    if (window.time != "") {
+                        setTimeout(function() {
+                            Refresh(window.time);
+                        }, 100);
+                    }
+                });
 
                 // 绑定每个小时中六个时间段的选择
                 $(".minuteChoose").click(function() {

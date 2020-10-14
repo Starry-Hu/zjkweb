@@ -57,6 +57,8 @@ function getDatas(id, time) {
         textColor: "#000",
         maskColor: "rgba(255, 255, 255, 0.8)",
         zlevel: 0,
+
+        textStyle: { fontSize: 20 },
     });
 
     $.ajax({
@@ -82,7 +84,7 @@ function createNode(res, top) {
     var element = {};
     element["TreeName"] = res.node.TreeName;
     element["name"] = res.node.NodeName;
-    element["value"] = res.node.Length2ParentNode;
+    element["value"] = keepTwoDecimal(res.node.Length2ParentNode);
     element["LineType"] = res.node.LineType;
     element["ExceptionStr"] = res.node.ExceptionStr;
     element["dataTime"] = res.node.dataTime
@@ -106,7 +108,7 @@ function createNode(res, top) {
     // 调整节点名称
     var index = res.node.NodeName.indexOf("_");
     if (index != -1) {
-        element["name"] = res.node.NodeName.substr(0, index);
+        element["name"] = res.node.NodeName.substring(0, index);
     }
     // 调整节点的标签位置
     if (!top) {
@@ -116,6 +118,16 @@ function createNode(res, top) {
     } else {
         top = false;
     }
+    // 调整出错信息（保留两位小数）
+    if (res.node.ExceptionStr != null) {
+        // 保留前缀
+        element["ExceptionStr"] = res.node.ExceptionStr.substr(0, 2);
+        var index = res.node.ExceptionStr.indexOf("m");
+        var temp = res.node.ExceptionStr.substring(2, index);
+        // 数值四舍五入，同时加上后缀
+        element["ExceptionStr"] += keepTwoDecimal(temp) + res.node.ExceptionStr.substring(index);
+    }
+
     // 设置孩子节点数组
     for (let i = 0; i < res.SubTrees.length; i++) {
         const child = res.SubTrees[i];
@@ -253,4 +265,15 @@ function getNameTitle(id) {
         return "3935";
     if (id == 11)
         return "接地电阻";
+}
+
+// 四舍五入保留2位小数（若第二位小数为0，则保留一位小数）
+function keepTwoDecimal(num) {
+    var result = parseFloat(num);
+    if (isNaN(result)) {
+        console.log('参数非数值，无法四舍五入保留两位小数！');
+        return false;
+    }
+    result = Math.round(num * 100) / 100;
+    return result;
 }

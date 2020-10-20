@@ -394,7 +394,7 @@
                         <div class="layui-form-item">
                             <label class="layui-form-label">父节点</label>
                             <div class="layui-input-inline">
-                                <select lay-verify="required" id="ParentNodeName2"></select>
+                                <select id="ParentNodeName2"></select>
                             </div>
                         </div>
                         <div class="layui-form-item">
@@ -409,8 +409,8 @@
                             <label class="layui-form-label">图中显示</label>
                             <div class="layui-input-inline">
                                 <select lay-verify="required" id="ShowInFigure2">
-                                <option value="true" selected="">是</option>
-                                <option value="false">否</option>
+                                <option value="1" selected="">是</option>
+                                <option value="0">否</option>
                             </select>
                             </div>
                         </div>
@@ -424,8 +424,8 @@
                             <label class="layui-form-label">耐张节点</label>
                             <div class="layui-input-inline">
                                 <select lay-verify="required" id="JNode2">
-                                 <option value="true" selected="">是</option>
-                                 <option value="false">否</option>
+                                 <option value="1" selected="">是</option>
+                                 <option value="0">否</option>
                              </select>
                             </div>
                         </div>
@@ -461,8 +461,8 @@
                         <div class="layui-form-item">
                             <label class="layui-form-label">父节点</label>
                             <div class="layui-input-inline">
-                                <select lay-verify="required" id="ParentNodeName1">
-                                     <option value=null selected="">无</option>
+                                <select id="ParentNodeName1">
+                                     <option value="" selected="">无</option>
                                 </select>
                             </div>
                         </div>
@@ -478,8 +478,8 @@
                             <label class="layui-form-label">图中显示</label>
                             <div class="layui-input-inline">
                                 <select lay-verify="required" id="ShowInFigure1">
-                                    <option value="true">是</option>
-                                    <option value="false">否</option>
+                                    <option value="1">是</option>
+                                    <option value="0">否</option>
                                 </select>
                             </div>
                         </div>
@@ -493,14 +493,14 @@
                             <label class="layui-form-label">耐张节点</label>
                             <div class="layui-input-inline">
                                 <select lay-verify="required" id="JNode1">
-                                    <option value="true">是</option>
-                                    <option value="false">否</option>
+                                    <option value="1">是</option>
+                                    <option value="0">否</option>
                                 </select>
                             </div>
                         </div>
                         <div class="layui-form-item">
                             <div class="layui-input-block">
-                                <button class="layui-btn submits" lay-submit lay-filter="add_line_submit">立即提交</button>
+                                <button class="layui-btn submits" lay-submit lay-filter="edit_line_submit">立即提交</button>
                                 <button type="reset" class="layui-btn layui-btn-primary">重置</button>
                             </div>
                         </div>

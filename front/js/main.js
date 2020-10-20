@@ -1,10 +1,6 @@
 var count = 0;
 var myDate = new Date();
 window.time = dateFormat("YYYY-mm-dd HH:MM", myDate);
-var map = ["一", "二", "三", "四", "五", "六", "七", "八", "九"];
-var orderNum = [1, 2, 3, 3, 4, 5, 5, 6, 13, 6, 7, 8, 8, 9, 10, 10, 11, 12, 13, 14, 15, 18];
-var specialNum = [1, 2, 3, 3, 4, 5, 5, 6, 13, 6, 7, 8, 8, 9, 10, 10, 11, 12, 13, 14, 15, 15, 16, 17, 18, 19, 20];
-var FZ = [101, 102, 103, 203, 204, 205, 305, 306, 3013, 406, 407, 408, 508, 509, 5010, 6010, 6011, 6012, 7013, 7014, 7015, 7018, 8015, 8016, 8017, 9018, 9019, 9020];
 
 window.chartCount = 0;
 window.timeout = false; //启动及关闭按钮 
@@ -197,7 +193,7 @@ function drawI_history(time, id) {
             if (id == 7) {
                 option = {
                     title: {
-                        text: getNameTitle(id) + "电缆段电压历史信息",
+                        text: getNameTitle(id) + "零序电压历史信息",
                         x: "center",
                     },
                     tooltip: {
@@ -238,7 +234,7 @@ function drawI_history(time, id) {
             } else if (id == 11) {
                 option = {
                     title: {
-                        text: getNameTitle(id) + "电缆段电阻历史信息",
+                        text: getNameTitle(id) + "历史信息",
                         x: "center",
                     },
                     tooltip: {
@@ -263,11 +259,52 @@ function drawI_history(time, id) {
                     yAxis: {
                         type: "value",
                         axisLabel: {
-                            formatter: "{value} R",
+                            formatter: "{value} A",
                         },
                     },
                     series: [{
-                        name: "当前电阻",
+                        name: "当前电流",
+                        type: "line",
+                        data: loss,
+                        itemStyle: { normal: { color: "#26C0C0" } },
+                        markLine: {
+                            data: [{ type: "average", name: "平均值" }],
+                        },
+                    }, ],
+                };
+            } else if (id == 8 || id == 9 || id == 10) {
+                option = {
+                    title: {
+                        text: getNameTitle(id) + "泄露电流历史信息",
+                        x: "center",
+                    },
+                    tooltip: {
+                        trigger: "axis",
+                    },
+
+                    toolbox: {
+                        show: true,
+                        feature: {
+                            dataZoom: {
+                                yAxisIndex: "none",
+                            },
+                            dataView: { readOnly: false },
+                            magicType: { type: ["line", "bar"] },
+                        },
+                    },
+                    xAxis: {
+                        type: "category",
+                        boundaryGap: false,
+                        data: date,
+                    },
+                    yAxis: {
+                        type: "value",
+                        axisLabel: {
+                            formatter: "{value} A",
+                        },
+                    },
+                    series: [{
+                        name: "当前电流",
                         type: "line",
                         data: loss,
                         itemStyle: { normal: { color: "#26C0C0" } },
@@ -279,7 +316,7 @@ function drawI_history(time, id) {
             } else {
                 option = {
                     title: {
-                        text: getNameTitle(id) + "风电机组电缆段电流历史信息",
+                        text: getNameTitle(id) + "风电机组零序电流历史信息",
                         x: "center",
                     },
                     tooltip: {
@@ -324,20 +361,6 @@ function drawI_history(time, id) {
     });
 }
 
-
-// 获取设备名称
-function GetDeviceID(ID) {
-
-    var result = ID;
-
-    if (ID == 200) { result = "升压站"; return result; }
-    if (ID < 1000)
-        result = "分支箱" + map[Math.floor(ID / 100 - 1)] + (ID % 100) + "号线";
-    else
-        result = "分支箱" + map[Math.floor(ID / 1000 - 1)] + (ID % 100) + "号线";
-    return result;
-
-}
 //////////////////
 
 for (var i = 1; i < 5; i++) $("#show" + i).draggable();
@@ -397,6 +420,7 @@ function getAlarm(data, time) {
         type: "post",
         data: { "DeviceID": data, "datatime": time },
         success: function(res) {
+            console.log(res)
             var count = 0;
             var content = "";
 
@@ -406,12 +430,14 @@ function getAlarm(data, time) {
             for (var i = 0; i < count; i++) {
 
                 for (var j = 1; j <= 5; j++) {
-                    if (j == 1)
-                        content = content + "<tr><td>" + (i + 1) + "</td><td>" + GetDeviceID_2(res.getElementsByTagName("Table")[i].childNodes[2 * j - 1].childNodes[0].nodeValue) + "</td>";
-                    else if (j == 5)
-                        content = content + "<td>" + res.getElementsByTagName("Table")[i].childNodes[2 * j - 1].childNodes[0].nodeValue + "</td></tr>";
+                    var element = res.getElementsByTagName("Table")[i].childNodes[2 * j - 1].childNodes[0].nodeValue;
+                    if (j == 1) {
+                        content = content + "<tr><td>" + (i + 1) + "</td><td>" + GetDeviceID_2(element) + "</td>";
+                        console.log(element);
+                    } else if (j == 5)
+                        content = content + "<td>" + element + "</td></tr>";
                     else
-                        content = content + "<td>" + res.getElementsByTagName("Table")[i].childNodes[2 * j - 1].childNodes[0].nodeValue + "</td>";
+                        content = content + "<td>" + element + "</td>";
                 }
             }
             content = content.replace(/m/g, "短路电流").replace(/l/g, "漏电流").replace(/c/g, "三相电流").replace(/v/g, "电压");
@@ -420,7 +446,7 @@ function getAlarm(data, time) {
             $("#list_2").html("");
             $("#list_2").html("<table class=\"table table-bordered table-striped table-hover\">" +
                 "<thead><tr>" +
-                "<th>序号</th><th>设备号</th><th>相位</th><th>异常类型</th><th>异常时间</th><th>长度</th></tr></thead><tbody>" + content + "</tbody></table>");
+                "<th>序号</th><th>设备号</th><th>相位</th><th>异常类型</th><th>异常时间</th><th>故障距离</th></tr></thead><tbody>" + content + "</tbody></table>");
 
             $("#list_2 table tbody tr").click(function(e) {
                 var ErrorTime = $(this).children().eq(4)[0].innerHTML;
@@ -437,55 +463,19 @@ function getAlarm(data, time) {
 
 // 获取设备号，用于绘制表格时显示名字
 function GetDeviceID_2(DeviceID) {
-    var ID = parseInt(DeviceID);
-    if (ID > 20) {
-        switch (ID) {
-            case 23:
-                return "箱变一";
-            case 26:
-                return "箱变二";
-            case 24:
-                return "箱变八";
-            case 25:
-                return "箱变十";
-            case 21:
-                return "箱变六";
-            case 22:
-                return "箱变九";
-        }
-    }
-    if (ID < 20) {
-        switch (ID) {
-            case 1:
-                return "分支箱一2号线";
-            case 2:
-                return "分支箱一3号线";
-            case 4:
-                return "分支箱二3号线";
-            case 3:
-                return "分支箱二4号线";
-            case 14:
-                return "分支箱三5号线";
-            case 13:
-                return "分支箱三13号线";
-            case 6:
-                return "分支箱四6号线";
-            case 5:
-                return "分支箱四7号线";
-            case 8:
-                return "分支箱五8号线";
-            case 7:
-                return "分支箱五9号线";
-            case 10:
-                return "分支箱七13号线";
-            case 9:
-                return "分支箱七14号线";
-            case 12:
-                return "分支箱八15号线";
-            case 11:
-                return "分支箱八16号线";
-        }
-    }
+    var id = parseInt(DeviceID);
+    if (id == 1) return "4#风电机组";
+    if (id == 2) return "5#风电机组";
+    if (id == 3) return "6#风电机组";
+    if (id == 4) return "7#风电机组";
+    if (id == 5) return "8#风电机组";
+    if (id == 6) return "9#风电机组";
+    if (id == 7) return "PT";
+    if (id == 8) return "3923";
+    if (id == 9) return "3921";
+    if (id == 10) return "3935";
+    if (id == 11) return "接地电流";
+    return "未知设备";
 }
 
 // 格式化时间

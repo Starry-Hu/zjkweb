@@ -40,19 +40,22 @@ function fillTable(id, array, time) {
             "</tr><tr><td>U<sub>B</sub></td>" +
             "<td style='color:" + temp[1][2] + "'>" + temp[1][0] + "</td><td style='color:" + temp[1][2] + "'>" + temp[1][1] + "</td>" +
             "</tr><tr><td>U<sub>C</sub></td>" +
-            "<td style='color:" + temp[2][2] + "'>" + temp[2][0] + "</td><td style='color:" + temp[2][2] + "'>" + temp[2][1] + "</td></tr><tr><td>3U<sub>0</sub></td>" +
+            "<td style='color:" + temp[2][2] + "'>" + temp[2][0] + "</td><td style='color:" + temp[2][2] + "'>" + temp[2][1] + "</td>" +
+            "</tr><tr><td>U<sub>0</sub></td>" +
             "<td style='color:" + temp[3][2] + "'>" + temp[3][0] + "</td><td style='color:" + temp[3][2] + "'>" + temp[3][1] + "</td></tr></tbody></table>"
         );
     } else if (id == 11) {
         $("#tableInfo").html($("#tableInfo").html() +
             "<table class=\"table table-bordered table-striped table-hover XBdetail detail \" id=\"table_info" + id + "\"  time=\"" + time + "\"  order=\"" + id + "\"><thead><tr>" +
             "<th width=\"80px\">" + nameTitle + "</th>" +
-            "<th>模值(R)</th><th>角度(度)</th></tr></thead><tbody><tr><td>R<sub>A</sub></td>" +
-            "<td style='color:" + temp[0][2] + "'>" + temp[0][0] + "</td><td style='color:" + temp[0][2] + "'>" + temp[0][1] + "</td>" +
-            "</tr><tr><td>R<sub>B</sub></td>" +
-            "<td style='color:" + temp[1][2] + "'>" + temp[1][0] + "</td><td style='color:" + temp[1][2] + "'>" + temp[1][1] + "</td>" +
-            "</tr><tr><td>R<sub>C</sub></td>" +
-            "<td style='color:" + temp[2][2] + "'>" + temp[2][0] + "</td><td style='color:" + temp[2][2] + "'>" + temp[2][1] + "</td></tr><tr><td>3R<sub>0</sub></td>" +
+            "<th>模值(A)</th><th>角度(度)</th></tr></thead><tbody><tr>" +
+            "<td>I<sub>r</sub></td>" + "<td style='color:" + temp[3][2] + "'>" + temp[3][0] + "</td><td style='color:" + temp[3][2] + "'>" + temp[3][1] + "</td></tr></tbody></table>"
+        );
+    } else if (id == 8 || id == 9 || id == 10) {
+        $("#tableInfo").html($("#tableInfo").html() +
+            "<table class=\"table table-bordered table-striped table-hover XBdetail detail \" id=\"table_info" + id + "\"  time=\"" + time + "\"  order=\"" + id + "\"><thead style='text-align:center'><tr>" +
+            "<th width=\"80px\">" + nameTitle + "</th>" +
+            "<th>模值(A)</th><th>角度(度)</th></tr></thead><tbody><tr><td>I<sub>0</sub></td>" +
             "<td style='color:" + temp[3][2] + "'>" + temp[3][0] + "</td><td style='color:" + temp[3][2] + "'>" + temp[3][1] + "</td></tr></tbody></table>"
         );
     } else {
@@ -64,7 +67,8 @@ function fillTable(id, array, time) {
             "</tr><tr><td>I<sub>B</sub></td>" +
             "<td style='color:" + temp[1][2] + "'>" + temp[1][0] + "</td><td style='color:" + temp[1][2] + "'>" + temp[1][1] + "</td>" +
             "</tr><tr><td>I<sub>C</sub></td>" +
-            "<td style='color:" + temp[2][2] + "'>" + temp[2][0] + "</td><td style='color:" + temp[2][2] + "'>" + temp[2][1] + "</td></tr><tr><td>3I<sub>0</sub></td>" +
+            "<td style='color:" + temp[2][2] + "'>" + temp[2][0] + "</td><td style='color:" + temp[2][2] + "'>" + temp[2][1] + "</td>" +
+            "</tr><tr><td>I<sub>0</sub></td>" +
             "<td style='color:" + temp[3][2] + "'>" + temp[3][0] + "</td><td style='color:" + temp[3][2] + "'>" + temp[3][1] + "</td></tr></tbody></table>"
         );
     }
@@ -123,5 +127,5 @@ function getNameTitle(id) {
     if (id == 10)
         return "3935";
     if (id == 11)
-        return "接地电阻";
+        return "接地电流";
 }

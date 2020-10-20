@@ -74,7 +74,6 @@ $('#TreeName2').blur(function() {
         });
     } else {
         getNodesByTree(PersonCode, TreeName, "", "ParentNodeName2");
-
     }
 });
 
@@ -599,12 +598,12 @@ function line_manage(PersonCode, searchCondition1, searchCondition2) {
                                 if (element.ParentNodeName == "") {
                                     element.ParentNodeName = "无";
                                 }
-                                if (element.ShowInFigure == false) {
+                                if (element.ShowInFigure == 0) {
                                     element.ShowInFigure = "否";
                                 } else {
                                     element.ShowInFigure = "是";
                                 }
-                                if (element.JNode == false) {
+                                if (element.JNode == 0) {
                                     element.JNode = "否";
                                 } else {
                                     element.JNode = "是";
@@ -674,12 +673,12 @@ $(".line_table").on("click", "tbody tr td button", function(e) {
 
         // 相应的信息处理
         getNodesByTree(PersonCode, $("#TreeName1").val(), ParentNodeName1, "ParentNodeName1");
-        if (ShowInFigure1 == "是") $("#ShowInFigure1").val("true");
-        else $("#ShowInFigure1").val("false");
+        if (ShowInFigure1 == "是") $("#ShowInFigure1").val("1");
+        else $("#ShowInFigure1").val("0");
 
 
-        if (JNode1 == "是") $("#JNode1").val("true");
-        else $("#JNode1").val("false");
+        if (JNode1 == "是") $("#JNode1").val("1");
+        else $("#JNode1").val("0");
 
 
 
@@ -701,17 +700,17 @@ $(".line_table").on("click", "tbody tr td button", function(e) {
 
         function del_line() {
             $.ajax({
-                url: url + "LineTypes.asmx/LineTypes_Delete",
+                url: url + "Line.asmx/Line_Management_Delete",
                 type: "post",
                 dataType: "json",
                 data: {
                     PersonCode: PersonCode,
                     TreeName: temp1,
-                    NodeName: temp2
+                    NodeName: temp2,
                 },
                 success: function(res) {
                     tip(res);
-                    line_manage(PersonCode);
+                    line_manage(PersonCode, "", "");
                 },
             });
         }
@@ -747,7 +746,7 @@ layui.use("form", function() {
             },
             success: function(res) {
                 tip(res);
-                line_manage(PersonCode);
+                line_manage(PersonCode, "", "");
             },
         });
         return false;
@@ -786,7 +785,7 @@ layui.use("form", function() {
                 },
                 success: function(res) {
                     tip(res);
-                    line_manage(PersonCode);
+                    line_manage(PersonCode, "", "");
                 },
             });
         }

@@ -22,6 +22,7 @@ function getDatas(id, time) {
             var temp2 = [];
             var data = [];
             var x = [];
+
             for (var i = 0; i < 4; i++) {
                 data.push(getArray(res)[i].split(","));
                 temp1.push(Math.max.apply(null, data[i]));
@@ -31,9 +32,11 @@ function getDatas(id, time) {
             max = Math.max.apply(null, temp1);
             min = Math.min.apply(null, temp2);
 
-            for (var i = 0; i < data[0].length; i++) {
+            len = Math.max(data[0].length, data[3].length);
+            for (var i = 0; i < len; i++) {
                 x.push((1.6 * i).toFixed(1));
             }
+
             createChart(
                 "current1",
                 data[0],
@@ -43,7 +46,6 @@ function getDatas(id, time) {
                 max,
                 min,
                 x,
-                time
             );
 
         },
